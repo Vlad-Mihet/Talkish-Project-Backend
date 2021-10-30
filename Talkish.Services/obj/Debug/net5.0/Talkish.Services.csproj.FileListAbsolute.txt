@@ -1,0 +1,15 @@
+C:\Users\vlad.mihet\source\projects\Talkish\Talkish.Services\bin\Debug\net5.0\Talkish.Services.deps.json
+C:\Users\vlad.mihet\source\projects\Talkish\Talkish.Services\bin\Debug\net5.0\Talkish.Services.dll
+C:\Users\vlad.mihet\source\projects\Talkish\Talkish.Services\bin\Debug\net5.0\ref\Talkish.Services.dll
+C:\Users\vlad.mihet\source\projects\Talkish\Talkish.Services\bin\Debug\net5.0\Talkish.Services.pdb
+C:\Users\vlad.mihet\source\projects\Talkish\Talkish.Services\bin\Debug\net5.0\Talkish.Domain.dll
+C:\Users\vlad.mihet\source\projects\Talkish\Talkish.Services\bin\Debug\net5.0\Talkish.Domain.pdb
+C:\Users\vlad.mihet\source\projects\Talkish\Talkish.Services\obj\Debug\net5.0\Talkish.Services.csproj.AssemblyReference.cache
+C:\Users\vlad.mihet\source\projects\Talkish\Talkish.Services\obj\Debug\net5.0\Talkish.Services.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\vlad.mihet\source\projects\Talkish\Talkish.Services\obj\Debug\net5.0\Talkish.Services.AssemblyInfoInputs.cache
+C:\Users\vlad.mihet\source\projects\Talkish\Talkish.Services\obj\Debug\net5.0\Talkish.Services.AssemblyInfo.cs
+C:\Users\vlad.mihet\source\projects\Talkish\Talkish.Services\obj\Debug\net5.0\Talkish.Services.csproj.CoreCompileInputs.cache
+C:\Users\vlad.mihet\source\projects\Talkish\Talkish.Services\obj\Debug\net5.0\Talkish.Services.csproj.CopyComplete
+C:\Users\vlad.mihet\source\projects\Talkish\Talkish.Services\obj\Debug\net5.0\Talkish.Services.dll
+C:\Users\vlad.mihet\source\projects\Talkish\Talkish.Services\obj\Debug\net5.0\ref\Talkish.Services.dll
+C:\Users\vlad.mihet\source\projects\Talkish\Talkish.Services\obj\Debug\net5.0\Talkish.Services.pdb
