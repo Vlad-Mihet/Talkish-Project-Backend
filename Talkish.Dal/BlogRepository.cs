@@ -27,16 +27,30 @@ namespace Talkish.Dal
 
         public async Task<Blog> DeleteBlogByIdAsync(int id)
         {
-            var blogToRemove = new Blog () { BlogId = id };
+            var blogToRemove = new Blog() { BlogId = id };
             _ctx.Blogs.Attach(blogToRemove);
             _ctx.Blogs.Remove(blogToRemove);
             await _ctx.SaveChangesAsync();
             return blogToRemove;
         }
 
-        public async Task<List<Blog>> GetAllBlogsAsync()
+        public async Task<List<BlogWithAuthor>> GetAllBlogsAsync()
         {
-            return await _ctx.Blogs.ToListAsync();
+            return await _ctx
+                .Blogs
+                .Join(_ctx.Authors,
+                    blog => blog.AuthorId,
+                    author => author.AuthorId,
+                    (blog, author) => new
+                    BlogWithAuthor() {
+                        BlogId = blog.BlogId,
+                        Title = blog.Title,
+                        Content = blog.Content,
+                        AuthorId = author.AuthorId,
+                        AuthorName = $"{author.FirstName} {author.LastName}",
+                    }
+                )
+                .ToListAsync();
         }
 
         public async Task<List<Blog>> GetAuthorsBlogsByAuthorIdAsync(int authorId)
