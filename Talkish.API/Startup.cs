@@ -35,6 +35,13 @@ namespace Talkish.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Talkish.API", Version = "v1" });
             });
+            services.AddCors(o => o.AddPolicy("Policy", builder =>
+            {
+                builder
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            }));
 
             var connectionString = Configuration.GetConnectionString("Default");
 
@@ -52,6 +59,9 @@ namespace Talkish.API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Talkish.API v1"));
             }
+
+            // Call CORS policy last
+            app.UseCors("Policy");
 
             app.UseHttpsRedirection();
 
