@@ -27,47 +27,26 @@ namespace Talkish.Dal
 
         public async Task<Blog> DeleteBlogByIdAsync(int id)
         {
-            var blogToRemove = new Blog() { BlogId = id };
-            _ctx.Blogs.Attach(blogToRemove);
+            Blog blogToRemove = await _ctx.Blogs.FirstOrDefaultAsync((b) => b.AuthorId == id);
             _ctx.Blogs.Remove(blogToRemove);
             await _ctx.SaveChangesAsync();
             return blogToRemove;
         }
 
-        public async Task<List<BlogWithAuthor>> GetAllBlogsAsync()
+        public async Task<List<Blog>> GetAllBlogsAsync()
         {
-            return await _ctx
-                .Blogs
-                .Join(_ctx.Authors,
-                    blog => blog.AuthorId,
-                    author => author.AuthorId,
-                    (blog, author) => new
-                    BlogWithAuthor() {
-                        BlogId = blog.BlogId,
-                        Title = blog.Title,
-                        Content = blog.Content,
-                        AuthorId = author.AuthorId,
-                        AuthorName = $"{author.FirstName} {author.LastName}",
-                    }
-                )
-                .ToListAsync();
-        }
-
-        public async Task<List<Blog>> GetAuthorsBlogsByAuthorIdAsync(int authorId)
-        {
-            List<Blog> authorBlogs = await _ctx.Blogs.Where(blog => blog.AuthorId == authorId).ToListAsync();
-            return authorBlogs;
+            return await _ctx.Blogs.Include((b) => b.Author).ToListAsync();
         }
 
         public async Task<Blog> GetBlogByIdAsync(int id)
         {
-            Blog blog = await _ctx.Blogs.FindAsync(id);
+            Blog blog = await _ctx.Blogs.FirstOrDefaultAsync((b) => b.BlogId == id);
             return blog;
         }
 
         public async Task<Blog> UpdateBlogAsync(Blog blogData)
         {
-            await Task.Run(() => _ctx.Blogs.Update(blogData));
+            _ctx.Blogs.Update(blogData);
             await _ctx.SaveChangesAsync();
             return blogData;
         }

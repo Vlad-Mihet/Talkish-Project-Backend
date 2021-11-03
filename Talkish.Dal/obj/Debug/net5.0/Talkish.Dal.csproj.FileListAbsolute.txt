@@ -15,4 +15,3 @@ C:\Users\vlad.mihet\source\projects\Talkish\Talkish.Dal\obj\Debug\net5.0\Talkish
 C:\Users\vlad.mihet\source\projects\Talkish\Talkish.Dal\obj\Debug\net5.0\ref\Talkish.Dal.dll
 C:\Users\vlad.mihet\source\projects\Talkish\Talkish.Dal\obj\Debug\net5.0\Talkish.Dal.pdb
 C:\Users\vlad.mihet\source\projects\Talkish\Talkish.Dal\obj\Debug\net5.0\Talkish.Dal.genruntimeconfig.cache
-C:\Users\vlad.mihet\source\projects\Talkish\Talkish.Dal\obj\Debug\net5.0\Talkish.Dal.csproj.CopyComplete

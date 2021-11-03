@@ -13,7 +13,9 @@ namespace Talkish.Domain.Interfaces
 
         Task<Author> CreateAuthorAsync(Author author);
 
-        Task<Author> DeleteAuthorAsync(int id);
+        Task<Author> DeleteAuthorByIdAsync(int id);
+
+        Task<List<Blog>> GetAuthorBlogsByAuthorIdAsync(int id);
 
         Task<Author> UpdateAuthorAsync(Author author);
 
