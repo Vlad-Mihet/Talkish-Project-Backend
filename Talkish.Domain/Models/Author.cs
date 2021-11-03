@@ -8,8 +8,6 @@ namespace Talkish.Domain.Models
 {
     public class Author
     {
-        /* TODO: */
-        // - Add Auto-Generated Id Here
         public int AuthorId { get; set; }
         
         public string FirstName { get; set; }
@@ -17,5 +15,7 @@ namespace Talkish.Domain.Models
         public string LastName { get; set; }
 
         public string Email { get; set; }
+
+        public List<Blog> blogs { get; set; }
     }
 }

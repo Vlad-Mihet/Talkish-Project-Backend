@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Talkish.Dal;
 
 namespace Talkish.Dal.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211103162000_changeBlogModel")]
+    partial class changeBlogModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,17 +67,12 @@ namespace Talkish.Dal.Migrations
             modelBuilder.Entity("Talkish.Domain.Models.Blog", b =>
                 {
                     b.HasOne("Talkish.Domain.Models.Author", "Author")
-                        .WithMany("blogs")
+                        .WithMany()
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Author");
-                });
-
-            modelBuilder.Entity("Talkish.Domain.Models.Author", b =>
-                {
-                    b.Navigation("blogs");
                 });
 #pragma warning restore 612, 618
         }

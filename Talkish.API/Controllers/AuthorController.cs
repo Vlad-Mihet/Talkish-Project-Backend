@@ -52,7 +52,7 @@ namespace Talkish.API.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteAuthor(int id)
         {
-            return Ok(await _authors.DeleteAuthorAsync(id));
+            return Ok(await _authors.DeleteAuthorByIdAsync(id));
         }
     }
 }

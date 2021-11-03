@@ -25,13 +25,18 @@ namespace Talkish.Dal
             return author;
         }
 
-        public async Task<Author> DeleteAuthorAsync(int id)
+        public async Task<Author> DeleteAuthorByIdAsync(int id)
         {
-            Author authorToRemove = new Author() { AuthorId = id };
-            _ctx.Authors.Attach(authorToRemove);
+            Author authorToRemove = await _ctx.Authors.FirstOrDefaultAsync((a) => a.AuthorId == id);
             _ctx.Authors.Remove(authorToRemove);
             await _ctx.SaveChangesAsync();
             return authorToRemove;
+        }
+
+        public async Task<List<Blog>> GetAuthorBlogsByAuthorIdAsync(int id)
+        {
+            List<Blog> blogs = await _ctx.Blogs.Where((b) => b.AuthorId == id).ToListAsync();
+            return blogs;
         }
 
         public async Task<List<Author>> GetAllAuthorsAsync()
