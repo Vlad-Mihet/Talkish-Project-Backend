@@ -11,11 +11,11 @@ namespace Talkish.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BlogController : ControllerBase
+    public class BlogsController : ControllerBase
     {
         private readonly IBlogRepository _blogs;
 
-        public BlogController(IBlogRepository blogs)
+        public BlogsController(IBlogRepository blogs)
         {
             _blogs = blogs;
         }
@@ -34,13 +34,6 @@ namespace Talkish.API.Controllers
         public async Task<IActionResult> GetAllBlogs()
         {
             return Ok(await _blogs.GetAllBlogsAsync());
-        }
-
-        [Route("{authorId}/blogs")]
-        [HttpGet]
-        public async Task<IActionResult> GetAuthorsBlogs(int authorId)
-        {
-            return Ok(await _blogs.GetAuthorsBlogsByAuthorIdAsync(authorId));
         }
 
         [HttpPost]

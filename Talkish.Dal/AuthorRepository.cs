@@ -35,7 +35,7 @@ namespace Talkish.Dal
 
         public async Task<List<Blog>> GetAuthorBlogsByAuthorIdAsync(int id)
         {
-            List<Blog> blogs = await _ctx.Blogs.Where((b) => b.AuthorId == id).ToListAsync();
+            List<Blog> blogs = await _ctx.Blogs.Where((b) => b.AuthorId == id).Include((b) => b.Author).ToListAsync();
             return blogs;
         }
 

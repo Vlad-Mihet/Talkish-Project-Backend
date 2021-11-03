@@ -11,11 +11,11 @@ namespace Talkish.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthorController : ControllerBase
+    public class AuthorsController : ControllerBase
     {
         private readonly IAuthorRepository _authors;
 
-        public AuthorController(IAuthorRepository authors)
+        public AuthorsController(IAuthorRepository authors)
         {
             _authors = authors;
         }
@@ -34,6 +34,13 @@ namespace Talkish.API.Controllers
         public async Task<IActionResult> GetAllAuthors()
         {
             return Ok(await _authors.GetAllAuthorsAsync());
+        }
+
+        [Route("{id}/Blogs")]
+        [HttpGet]
+        public async Task<IActionResult> GetAuthorBlogsByAuthorIdAsync(int id)
+        {
+            return Ok(await _authors.GetAuthorBlogsByAuthorIdAsync(id));
         }
 
         [HttpPost]

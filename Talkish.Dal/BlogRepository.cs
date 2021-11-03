@@ -40,7 +40,7 @@ namespace Talkish.Dal
 
         public async Task<Blog> GetBlogByIdAsync(int id)
         {
-            Blog blog = await _ctx.Blogs.FirstOrDefaultAsync((b) => b.BlogId == id);
+            Blog blog = await _ctx.Blogs.Include((b) => b.Author).FirstOrDefaultAsync((b) => b.BlogId == id);
             return blog;
         }
 

@@ -15,7 +15,5 @@ namespace Talkish.Domain.Models
         public string LastName { get; set; }
 
         public string Email { get; set; }
-
-        public List<Blog> blogs { get; set; }
     }
 }
