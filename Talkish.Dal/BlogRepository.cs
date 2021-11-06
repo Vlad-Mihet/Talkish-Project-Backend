@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Talkish.Domain.DTOs;
 using Talkish.Domain.Interfaces;
 using Talkish.Domain.Models;
 
@@ -33,15 +34,47 @@ namespace Talkish.Dal
             return blogToRemove;
         }
 
-        public async Task<List<Blog>> GetAllBlogsAsync()
+        public async Task<List<BlogDTO>> GetAllBlogsAsync()
         {
-            return await _ctx.Blogs.Include((b) => b.Author).ToListAsync();
+            List<Blog> blogs = await _ctx.Blogs.Include((b) => b.Author).ToListAsync();
+            List<BlogDTO> blogDTOs = new List<BlogDTO>();
+
+            blogs.ForEach((blog) => {
+                var blogDTO = new BlogDTO()
+                {
+                    BlogId = blog.BlogId,
+                    Title = blog.Title,
+                    Content = blog.Content,
+                    Author = new BlogAuthorDTO()
+                    {
+                        AuthorId = blog.Author.AuthorId,
+                        FirstName = blog.Author.FirstName,
+                        LastName = blog.Author.LastName,
+                    },
+                };
+
+                blogDTOs.Add(blogDTO);
+            });
+
+            return blogDTOs;
         }
 
-        public async Task<Blog> GetBlogByIdAsync(int id)
+        public async Task<BlogDTO> GetBlogByIdAsync(int id)
         {
-            Blog blog = await _ctx.Blogs.Include((b) => b.Author).FirstOrDefaultAsync((b) => b.BlogId == id);
-            return blog;
+            Blog blog = await _ctx.Blogs.Where((blog) => blog.BlogId == id).FirstOrDefaultAsync();
+            BlogDTO blogDTO = new BlogDTO()
+            {
+                BlogId = blog.BlogId,
+                Title = blog.Title,
+                Content = blog.Content,
+                Author = new BlogAuthorDTO() { 
+                    AuthorId = blog.Author.AuthorId,
+                    FirstName = blog.Author.FirstName,
+                    LastName = blog.Author.LastName,
+                },
+            };
+            // Blog blog = await _ctx.Blogs.Include((b) => b.Author).FirstOrDefaultAsync((b) => b.BlogId == id);
+            return blogDTO;
         }
 
         public async Task<Blog> UpdateBlogAsync(Blog blogData)
