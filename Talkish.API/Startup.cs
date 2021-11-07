@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -14,6 +15,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Talkish.Dal;
 using Talkish.Domain.Interfaces;
+using Talkish.Domain.Profiles;
 
 namespace Talkish.API
 {
@@ -45,9 +47,15 @@ namespace Talkish.API
 
             var connectionString = Configuration.GetConnectionString("Default");
 
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
             services.AddScoped<IBlogRepository, BlogRepository>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();
+            services.AddAutoMapper(typeof(MappingProfile));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
