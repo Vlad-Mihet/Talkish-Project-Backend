@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Talkish.Domain.Interfaces
 {
-    public interface IBlogService
+    public interface IAuthorService
     {
     }
 }

@@ -7,7 +7,7 @@ using Talkish.Domain.DTOs;
 using Talkish.Domain.Interfaces;
 using Talkish.Domain.Models;
 
-namespace Talkish.Dal
+namespace Talkish.Dal.Repositories
 {
     public class BlogRepository : IBlogRepository
     {
