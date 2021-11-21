@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Talkish.Dal\Talkish.Dal.csproj" />
+    <ProjectReference Include="..\Talkish.Services\Talkish.Services.csproj" />
   </ItemGroup>
 
 </Project>

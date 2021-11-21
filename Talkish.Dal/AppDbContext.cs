@@ -17,5 +17,7 @@ namespace Talkish.Dal
         public DbSet<Blog> Blogs { get; set; } 
 
         public DbSet<Author> Authors { get; set; }
+
+        public DbSet<Topic> Topics { get; set; }
     }
 }

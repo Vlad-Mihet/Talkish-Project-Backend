@@ -17,6 +17,10 @@ namespace Talkish.Domain.Models
 
         public int AuthorId { get; set; }
 
+        public int ReadingTime { get; set; }
+
+        public List<Topic> Topics { get; set; }
+
         public Author Author { get; set; }
     }
 }
