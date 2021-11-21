@@ -12,10 +12,13 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Talkish.Dal;
+using Talkish.Dal.Repositories;
 using Talkish.Domain.Interfaces;
 using Talkish.Domain.Profiles;
+using Talkish.Services;
 
 namespace Talkish.API
 {
@@ -47,15 +50,12 @@ namespace Talkish.API
 
             var connectionString = Configuration.GetConnectionString("Default");
 
-            var mapperConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new MappingProfile());
-            });
-
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
             services.AddScoped<IBlogRepository, BlogRepository>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();
-            services.AddAutoMapper(typeof(MappingProfile));
+            services.AddScoped<ITopicRepository, TopicRepository>();
+            services.AddScoped<IBlogService, BlogService>();
+            services.AddAutoMapper(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

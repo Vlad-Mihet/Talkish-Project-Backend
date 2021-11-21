@@ -10,11 +10,15 @@ namespace Talkish.Domain.Interfaces
 {
     public interface IBlogRepository
     {
-        Task<BlogDTO> GetBlogByIdAsync(int Id);
+        Task<Blog> GetBlogByIdAsync(int Id);
 
-        Task<List<BlogDTO>> GetAllBlogsAsync();
+        Task<List<Blog>> GetAllBlogsAsync();
 
         Task<Blog> UpdateBlogAsync(Blog blogData);
+
+        Task<Blog> AddTopicToBlogAsync(int Id, int TopicId);
+
+        Task<List<Topic>> GetBlogTopicsByBlogIdAsync(int Id);
 
         Task<Blog> DeleteBlogByIdAsync(int Id);
 

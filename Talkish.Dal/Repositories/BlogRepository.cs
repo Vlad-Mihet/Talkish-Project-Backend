@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,11 +14,13 @@ namespace Talkish.Dal.Repositories
     {
         private readonly AppDbContext _ctx;
         private readonly IMapper _mapper;
+        private readonly ILogger<BlogRepository> _logger;
 
-        public BlogRepository(AppDbContext ctx, IMapper mapper)
+        public BlogRepository(AppDbContext ctx, IMapper mapper, ILogger<BlogRepository> logger)
         {
             _ctx = ctx;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<Blog> CreateBlogAsync(Blog blog)
@@ -27,30 +30,40 @@ namespace Talkish.Dal.Repositories
             return blog;
         }
 
-        public async Task<Blog> DeleteBlogByIdAsync(int id)
+        public async Task<Blog> DeleteBlogByIdAsync(int Id)
         {
-            Blog blogToRemove = await _ctx.Blogs.FirstOrDefaultAsync((b) => b.AuthorId == id);
+            Blog blogToRemove = await _ctx.Blogs.FirstOrDefaultAsync((b) => b.AuthorId == Id);
             _ctx.Blogs.Remove(blogToRemove);
             await _ctx.SaveChangesAsync();
             return blogToRemove;
         }
 
-        public async Task<List<BlogDTO>> GetAllBlogsAsync()
+        public async Task<List<Blog>> GetAllBlogsAsync()
         {
-            List<Blog> blogs = await _ctx.Blogs.Include((b) => b.Author).ToListAsync();
-            List<BlogDTO> blogDTOs = _mapper.Map<List<BlogDTO>>(blogs);
+            List<Blog> blogs = await _ctx.Blogs
+                .Include((b) => b.Author)
+                .Include((b) => b.Topics)
+                .ToListAsync();
 
-            return blogDTOs;
+            return blogs;
         }
 
-        public async Task<BlogDTO> GetBlogByIdAsync(int id)
+        public async Task<Blog> GetBlogByIdAsync(int Id)
         {
             Blog blog = await _ctx.Blogs
-                .Where((blog) => blog.BlogId == id)
+                .Where((blog) => blog.BlogId == Id)
                 .Include((b) => b.Author)
+                .Include((b) => b.Topics)
                 .FirstOrDefaultAsync();
-            BlogDTO blogDTO = _mapper.Map<BlogDTO>(blog);
-            return blogDTO;
+            return blog;
+        }
+
+        public async Task<List<Topic>> GetBlogTopicsByBlogIdAsync(int Id)
+        {
+            Blog blog = await _ctx.Blogs
+                .Include((blog) => blog.Topics)
+                .FirstOrDefaultAsync((blog) => blog.BlogId == Id);
+            return blog.Topics;
         }
 
         public async Task<Blog> UpdateBlogAsync(Blog blogData)
@@ -58,6 +71,22 @@ namespace Talkish.Dal.Repositories
             _ctx.Blogs.Update(blogData);
             await _ctx.SaveChangesAsync();
             return blogData;
+        }
+
+        public async Task<Blog> AddTopicToBlogAsync(int Id, int TopicId)
+        {
+            Blog blog = await _ctx.Blogs
+                .Include((blog) => blog.Topics)
+                .Include((blog) => blog.Author)
+                .FirstOrDefaultAsync((blog) => blog.BlogId == Id);
+            Topic topic = await _ctx.Topics
+                .Where((topic) => topic.TopicId == TopicId)
+                .FirstOrDefaultAsync();
+
+            blog.Topics.Add(topic);
+            await _ctx.SaveChangesAsync();
+            
+            return blog;
         }
     }
 }

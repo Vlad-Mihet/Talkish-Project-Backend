@@ -3,21 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Talkish.Domain.Models;
 
 namespace Talkish.Domain.DTOs
 {
-    public class BlogDTO
+    class BlogByTopic
     {
         public int BlogId { get; set; }
 
         public string Title { get; set; }
 
         public string Content { get; set; }
-
-        public int ReadingTime { get; set; }
-
-        public List<TopicDTO> Topics { get; set; }
 
         public BlogAuthorDTO Author { get; set; }
     }
