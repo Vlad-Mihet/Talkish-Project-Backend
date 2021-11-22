@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Talkish.Domain.DTOs;
-using Talkish.Domain.Models;
+using Talkish.API.DTOs;
+using Talkish.API.Models;
 
-namespace Talkish.Domain.Profiles
+namespace Talkish.API.Profiles
 {
     public class MappingProfile : Profile
     {
