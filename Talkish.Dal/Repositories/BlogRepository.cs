@@ -1,26 +1,19 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Talkish.Domain.DTOs;
-using Talkish.Domain.Interfaces;
-using Talkish.Domain.Models;
+using Talkish.API.Interfaces;
+using Talkish.API.Models;
 
 namespace Talkish.Dal.Repositories
 {
     public class BlogRepository : IBlogRepository
     {
         private readonly AppDbContext _ctx;
-        private readonly IMapper _mapper;
-        private readonly ILogger<BlogRepository> _logger;
 
-        public BlogRepository(AppDbContext ctx, IMapper mapper, ILogger<BlogRepository> logger)
+        public BlogRepository(AppDbContext ctx)
         {
             _ctx = ctx;
-            _mapper = mapper;
-            _logger = logger;
         }
 
         public async Task<Blog> CreateBlogAsync(Blog blog)

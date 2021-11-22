@@ -1,27 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Talkish.Domain.DTOs;
-using Talkish.Domain.Models;
+using Talkish.API.Models;
 
-namespace Talkish.Domain.Interfaces
+namespace Talkish.API.Interfaces
 {
     public interface IBlogService
     {
-        Task<BlogDTO> CreateBlog(Blog BlogData);
+        Task<Blog> CreateBlog(Blog BlogData);
 
-        Task<List<BlogDTO>> GetAllBlogs();
+        Task<List<Blog>> GetAllBlogs();
 
-        Task<BlogDTO> GetBlogById(int Id);
+        Task<Blog> GetBlogById(int Id);
 
-        Task<List<TopicDTO>> GetBlogTopicsById(int Id);
+        Task<List<Topic>> GetBlogTopicsById(int Id);
 
-        Task<BlogDTO> UpdateBlog(Blog BlogData);
+        Task<Blog> UpdateBlog(Blog BlogData);
 
-        Task<BlogDTO> AddTopicToBlog(int BlogId, int TopicId);
+        Task<Blog> AddTopicToBlog(int BlogId, int TopicId);
 
-        Task<BlogDTO> DeleteBlogById(int Id);
+        Task<Blog> DeleteBlogById(int Id);
     }
 }

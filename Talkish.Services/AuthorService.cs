@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Talkish.Domain.Interfaces;
+using Talkish.API.Interfaces;
 
 namespace Talkish.Services
 {

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Talkish.Domain.DTOs;
-using Talkish.Domain.Models;
+using Talkish.API.Models;
 
-namespace Talkish.Domain.Interfaces
+namespace Talkish.API.Interfaces
 {
     public interface ITopicRepository
     {

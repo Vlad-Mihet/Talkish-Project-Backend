@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Talkish.Domain.Models;
+using Talkish.API.Models;
 
 namespace Talkish.Dal
 {

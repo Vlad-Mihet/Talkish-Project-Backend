@@ -4,8 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Talkish.Domain.Interfaces;
-using Talkish.Domain.Models;
+using Talkish.API.Interfaces;
+using Talkish.API.Models;
 
 namespace Talkish.API.Controllers
 {
