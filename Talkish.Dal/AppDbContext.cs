@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Talkish.API.Models;
+using Talkish.Domain.Models;
 
 namespace Talkish.Dal
 {

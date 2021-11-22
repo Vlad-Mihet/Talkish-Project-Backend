@@ -1,4 +1,4 @@
-﻿namespace Talkish.API.Models
+﻿namespace Talkish.Domain.Models
 {
     public class Author
     {

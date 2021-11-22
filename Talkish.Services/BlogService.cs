@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Talkish.API.Interfaces;
-using Talkish.API.Models;
+using Talkish.Domain.Interfaces;
+using Talkish.Domain.Models;
 
 namespace Talkish.Services
 {

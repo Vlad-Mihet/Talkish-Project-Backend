@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace Talkish.API
+namespace Talkish.Domain
 {
     public class Program
     {

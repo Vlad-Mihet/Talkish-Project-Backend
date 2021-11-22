@@ -1,4 +1,4 @@
-﻿using Talkish.API.Interfaces;
+﻿using Talkish.Domain.Interfaces;
 
 namespace Talkish.Services
 {

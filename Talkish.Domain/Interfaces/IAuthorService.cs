@@ -1,4 +1,4 @@
-﻿namespace Talkish.API.Interfaces
+﻿namespace Talkish.Domain.Interfaces
 {
     public interface IAuthorService
     {

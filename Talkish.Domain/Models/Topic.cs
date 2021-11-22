@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Talkish.API.Models
+namespace Talkish.Domain.Models
 {
     public class Topic
     {
