@@ -45,6 +45,8 @@ namespace Talkish.Domain
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<ITopicRepository, TopicRepository>();
             services.AddScoped<IBlogService, BlogService>();
+            services.AddScoped<IAuthorService, AuthorService>();
+            services.AddScoped<ITopicService, TopicService>();
             services.AddAutoMapper(typeof(Startup));
         }
 
