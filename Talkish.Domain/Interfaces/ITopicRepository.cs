@@ -6,14 +6,14 @@ namespace Talkish.API.Interfaces
 {
     public interface ITopicRepository
     {
-        Task<TopicDTO> GetTopicByIdAsync(int id);
+        Task<Topic> GetTopicByIdAsync(int id);
 
-        Task<List<TopicDTO>> GetAllTopicsAsync();
+        Task<List<Topic>> GetAllTopicsAsync();
 
-        Task<TopicDTO> CreateTopicAsync(Topic topic);
+        Task<Topic> CreateTopicAsync(Topic topic);
 
-        Task<TopicDTO> UpdateTopicAsync(Topic topic);
+        Task<Topic> UpdateTopicAsync(Topic topic);
 
-        Task<TopicDTO> DeleteTopicByIdAsync(int id);
+        Task<Topic> DeleteTopicByIdAsync(int id);
     }
 }

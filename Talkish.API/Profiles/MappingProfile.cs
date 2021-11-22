@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Talkish.API.DTOs;
 using Talkish.API.Models;
+using Talkish.API.DTOs;
 
 namespace Talkish.API.Profiles
 {

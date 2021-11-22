@@ -1,5 +1,4 @@
 ﻿using System;
-using AutoMapper;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Talkish.API.Interfaces;
