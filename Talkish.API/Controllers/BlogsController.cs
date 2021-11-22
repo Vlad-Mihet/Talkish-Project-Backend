@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Talkish.API.DTOs;
-using Talkish.API.Interfaces;
-using Talkish.API.Models;
+using Talkish.Domain.DTOs;
+using Talkish.Domain.Interfaces;
+using Talkish.Domain.Models;
 
-namespace Talkish.API.Controllers
+namespace Talkish.Domain.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

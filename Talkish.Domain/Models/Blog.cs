@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Talkish.API.Models
+namespace Talkish.Domain.Models
 {
     public class Blog
     {

@@ -1,4 +1,4 @@
-﻿namespace Talkish.API.DTOs
+﻿namespace Talkish.Domain.DTOs
 {
     public class TopicDTO
     {

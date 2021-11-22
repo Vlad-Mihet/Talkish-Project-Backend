@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Talkish.API.DTOs;
-using Talkish.API.Models;
+using Talkish.Domain.Models;
+using Talkish.Domain.DTOs;
 
-namespace Talkish.API.Profiles
+namespace Talkish.Domain.Profiles
 {
     public class MappingProfile : Profile
     {

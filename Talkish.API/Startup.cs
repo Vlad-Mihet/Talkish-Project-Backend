@@ -7,10 +7,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Talkish.Dal;
 using Talkish.Dal.Repositories;
-using Talkish.API.Interfaces;
+using Talkish.Domain.Interfaces;
 using Talkish.Services;
 
-namespace Talkish.API
+namespace Talkish.Domain
 {
     public class Startup
     {
@@ -45,6 +45,8 @@ namespace Talkish.API
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<ITopicRepository, TopicRepository>();
             services.AddScoped<IBlogService, BlogService>();
+            services.AddScoped<IAuthorService, AuthorService>();
+            services.AddScoped<ITopicService, TopicService>();
             services.AddAutoMapper(typeof(Startup));
         }
 

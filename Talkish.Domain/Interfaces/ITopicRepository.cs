@@ -1,19 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Talkish.API.Models;
+using Talkish.Domain.Models;
 
-namespace Talkish.API.Interfaces
+namespace Talkish.Domain.Interfaces
 {
     public interface ITopicRepository
     {
-        Task<TopicDTO> GetTopicByIdAsync(int id);
+        Task<Topic> GetTopicByIdAsync(int Id);
 
-        Task<List<TopicDTO>> GetAllTopicsAsync();
+        Task<List<Topic>> GetAllTopicsAsync();
 
-        Task<TopicDTO> CreateTopicAsync(Topic topic);
+        Task<Topic> CreateTopicAsync(Topic TopicData);
 
-        Task<TopicDTO> UpdateTopicAsync(Topic topic);
+        Task<Topic> UpdateTopicAsync(Topic TopicData);
 
-        Task<TopicDTO> DeleteTopicByIdAsync(int id);
+        Task<Topic> DeleteTopicByIdAsync(int Id);
     }
 }
