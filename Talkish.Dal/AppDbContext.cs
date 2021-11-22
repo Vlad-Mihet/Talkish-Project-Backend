@@ -14,5 +14,12 @@ namespace Talkish.Dal
         public DbSet<Author> Authors { get; set; }
 
         public DbSet<Topic> Topics { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Topic>()
+                .HasIndex((topic) => topic.Name)
+                .IsUnique();
+        }
     }
 }
