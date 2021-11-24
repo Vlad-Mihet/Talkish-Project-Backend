@@ -7,10 +7,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Talkish.Dal;
 using Talkish.Dal.Repositories;
-using Talkish.Domain.Interfaces;
+using Talkish.API.Interfaces;
 using Talkish.Services;
 
-namespace Talkish.Domain
+namespace Talkish.API
 {
     public class Startup
     {

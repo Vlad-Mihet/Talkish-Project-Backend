@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Talkish.Domain.DTOs;
-using Talkish.Domain.Interfaces;
-using Talkish.Domain.Models;
+using Talkish.API.DTOs;
+using Talkish.API.Interfaces;
+using Talkish.API.Models;
 
-namespace Talkish.Domain.Controllers
+namespace Talkish.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -48,11 +48,11 @@ namespace Talkish.Domain.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateBlog([FromBody] Blog BlogData)
+        public async Task<IActionResult> CreateBlog([FromBody] AddBlogDTO BlogData)
         {
-            Blog blog = await _service.CreateBlog(BlogData);
-            BlogDTO blogDTO = _mapper.Map<BlogDTO>(blog);
-            return Ok(blogDTO);
+            Blog blog = _mapper.Map<Blog>(BlogData);
+            await _service.CreateBlog(blog);
+            return Ok(BlogData);
         }
 
         [Route("{id}")]

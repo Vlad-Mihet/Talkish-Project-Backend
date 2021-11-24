@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Talkish.Domain.Models;
+using Talkish.API.Models;
 
-namespace Talkish.Domain.Interfaces
+namespace Talkish.API.Interfaces
 {
     public interface IAuthorService
     {

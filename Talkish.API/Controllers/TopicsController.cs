@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Talkish.Domain.DTOs;
-using Talkish.Domain.Interfaces;
-using Talkish.Domain.Models;
+using Talkish.API.DTOs;
+using Talkish.API.Interfaces;
+using Talkish.API.Models;
 
-namespace Talkish.Domain.Controllers
+namespace Talkish.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -22,11 +22,11 @@ namespace Talkish.Domain.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateTopic(Topic TopicData)
+        public async Task<IActionResult> CreateTopic([FromBody] AddTopicDTO TopicData)
         {
-            Topic topic = await _service.CreateTopic(TopicData);
-            TopicDTO topicDTO = _mapper.Map<TopicDTO>(topic);
-            return Ok(topicDTO);
+            Topic topic = _mapper.Map<Topic>(TopicData);
+            await _service.CreateTopic(topic);
+            return Ok(topic);
         }
 
         [HttpGet]

@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Talkish.Domain.DTOs;
-using Talkish.Domain.Interfaces;
-using Talkish.Domain.Models;
+using Talkish.API.DTOs;
+using Talkish.API.Interfaces;
+using Talkish.API.Models;
 
-namespace Talkish.Domain.Controllers
+namespace Talkish.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -21,15 +21,12 @@ namespace Talkish.Domain.Controllers
             _mapper = mapper;
         }
 
-        /* TODO: */
-        // Add Error Handling
-
         [HttpPost]
-        public async Task<IActionResult> CreateAuthor([FromBody] Author AuthorData)
+        public async Task<IActionResult> CreateAuthor([FromBody] AddAuthorDTO AuthorData)
         {
-            Author author = await _service.CreateAuthor(AuthorData);
-            BlogAuthorDTO authorDTO = _mapper.Map<BlogAuthorDTO>(author);
-            return Ok(authorDTO);
+            Author author = _mapper.Map<Author>(AuthorData);
+            await _service.CreateAuthor(author);
+            return Ok(author);
         }
 
         [HttpGet]

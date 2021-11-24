@@ -2,8 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Talkish.Domain.Interfaces;
-using Talkish.Domain.Models;
+using Talkish.API.Interfaces;
+using Talkish.API.Models;
 
 namespace Talkish.Dal.Repositories
 {

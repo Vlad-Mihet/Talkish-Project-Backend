@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Talkish.Domain.DTOs
+namespace Talkish.API.DTOs
 {
     public class BlogDTO
     {
