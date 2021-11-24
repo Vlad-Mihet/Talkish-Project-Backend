@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Talkish.Domain.Models
+namespace Talkish.API.Models
 {
     public class Author
     {
