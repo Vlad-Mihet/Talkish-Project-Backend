@@ -33,42 +33,42 @@ namespace Talkish.API.Controllers
         public async Task<IActionResult> GetAllAuthors()
         {
             List<Author> authors = await _service.GetAllAuthors();
-            List<BlogAuthorDTO> authorDTOs = _mapper.Map<List<BlogAuthorDTO>>(authors);
+            List<AuthorWithBlogsDTO> authorDTOs = _mapper.Map<List<AuthorWithBlogsDTO>>(authors);
             return Ok(authorDTOs);
         }
 
-        [Route("{id}")]
+        [Route("{Id}")]
         [HttpGet]
-        public async Task<IActionResult> GetAuthorById(int Id)
+        public async Task<IActionResult> GetAuthorById([FromRoute] int Id)
         {
             Author author = await _service.GetAuthorById(Id);
-            BlogAuthorDTO authorDTO = _mapper.Map<BlogAuthorDTO>(author);
+            AuthorWithBlogsDTO authorDTO = _mapper.Map<AuthorWithBlogsDTO>(author);
             return Ok(authorDTO);
         }
 
-        [Route("{id}/Blogs")]
+        [Route("{Id}/Blogs")]
         [HttpGet]
-        public async Task<IActionResult> GetAuthorBlogsByAuthorIdAsync(int Id)
+        public async Task<IActionResult> GetAuthorBlogsByAuthorIdAsync([FromRoute] int Id)
         {
             List<Blog> blogs = await _service.GetAuthorBlogs(Id);
             List<BlogDTO> blogDTOs = _mapper.Map<List<BlogDTO>>(blogs);
             return Ok(blogDTOs);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateAuthor(Author AuthorData)
+        [HttpPatch]
+        public async Task<IActionResult> UpdateAuthor([FromBody] UpdateAuthorDTO AuthorData)
         {
-            Author author = await _service.UpdateAuthor(AuthorData);
-            BlogAuthorDTO authorDTO = _mapper.Map<BlogAuthorDTO>(author);
-            return Ok(authorDTO);
+            Author author = _mapper.Map<Author>(AuthorData);
+            await _service.UpdateAuthor(author);
+            return Ok(AuthorData);
         }
 
-        [Route("{id}")]
+        [Route("{Id}")]
         [HttpDelete]
-        public async Task<IActionResult> DeleteAuthor(int Id)
+        public async Task<IActionResult> DeleteAuthor([FromRoute] int Id)
         {
             Author author = await _service.DeleteAuthorById(Id);
-            BlogAuthorDTO authorDTO = _mapper.Map<BlogAuthorDTO>(author);
+            AuthorWithBlogsDTO authorDTO = _mapper.Map<AuthorWithBlogsDTO>(author);
             return Ok(authorDTO);
         }
     }
