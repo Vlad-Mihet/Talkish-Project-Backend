@@ -61,7 +61,7 @@ namespace Talkish.Dal.Repositories
 
         public async Task<Author> UpdateAuthorAsync(Author authorData)
         {
-            await Task.Run(() => _ctx.Authors.Update(authorData));
+            _ctx.Authors.Update(authorData);
             await _ctx.SaveChangesAsync();
             return authorData;
         }

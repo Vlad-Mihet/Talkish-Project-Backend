@@ -21,11 +21,11 @@ namespace Talkish.API.Controllers
             _mapper = mapper;
         }
 
-        [Route("{id}")]
+        [Route("{Id}")]
         [HttpGet]
-        public async Task<IActionResult> GetBlogById(int id)
+        public async Task<IActionResult> GetBlogById([FromRoute] int Id)
         {
-            Blog blog = await _service.GetBlogById(id);
+            Blog blog = await _service.GetBlogById(Id);
             BlogDTO blogDTO = _mapper.Map<BlogDTO>(blog);
             return Ok(blogDTO);
         }
@@ -38,9 +38,9 @@ namespace Talkish.API.Controllers
             return Ok(blogDTOs);
         }
 
-        [Route("{id}/topics")]
+        [Route("{Id}/topics")]
         [HttpGet]
-        public async Task<IActionResult> GetBlogTopicsByBlogId(int Id)
+        public async Task<IActionResult> GetBlogTopicsByBlogId([FromRoute] int Id)
         {
             List<Topic> topics = await _service.GetBlogTopicsById(Id);
             List<TopicDTO> topicDTOs = _mapper.Map<List<TopicDTO>>(topics);
@@ -55,16 +55,15 @@ namespace Talkish.API.Controllers
             return Ok(BlogData);
         }
 
-        [Route("{id}")]
-        [HttpPut]
-        public async Task<IActionResult> UpdateBlogById([FromBody] Blog BlogData)
+        [HttpPatch]
+        public async Task<IActionResult> UpdateBlog([FromBody] UpdateBlogDTO BlogData)
         {
-            Blog blog = await _service.UpdateBlog(BlogData);
-            BlogDTO blogDTO = _mapper.Map<BlogDTO>(blog);
-            return Ok(blogDTO);
+            Blog blog = _mapper.Map<Blog>(BlogData);
+            await _service.UpdateBlog(blog);
+            return Ok(blog);
         }
 
-        [Route("{id}/add-topic/{topicId}")]
+        [Route("{BlogId}/add-topic/{TopicId}")]
         [HttpPut]
         public async Task<IActionResult> AddTopicToBlog([FromRoute] int BlogId, [FromRoute] int TopicId)
         {
@@ -73,11 +72,11 @@ namespace Talkish.API.Controllers
             return Ok(blogDTO);
         }
 
-        [Route("{id}")]
+        [Route("{Id}")]
         [HttpDelete]
-        public async Task<IActionResult> DeleteBlogById(int id)
+        public async Task<IActionResult> DeleteBlogById([FromRoute] int Id)
         {
-            Blog blog = await _service.DeleteBlogById(id);
+            Blog blog = await _service.DeleteBlogById(Id);
             BlogDTO blogDTO = _mapper.Map<BlogDTO>(blog);
             return Ok(blogDTO);
         }

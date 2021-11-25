@@ -11,6 +11,9 @@ namespace Talkish.API.Profiles
 
             CreateMap<Blog, AuthorBlogDTO>();
 
+            CreateMap<Blog, UpdateBlogDTO>()
+                .ReverseMap();
+
             CreateMap<Blog, AddBlogDTO>()
                 .ReverseMap();
 
