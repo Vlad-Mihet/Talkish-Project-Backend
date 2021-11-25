@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Talkish.API.Models
+namespace Talkish.API.DTOs
 {
-    public class Author
+    public class AddAuthorDTO
     {
-        [Key]
-        public int AuthorId { get; set; }
-
         [Required]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
@@ -21,7 +17,5 @@ namespace Talkish.API.Models
         [DataType(DataType.EmailAddress)]
         [EmailAddress]
         public string Email { get; set; }
-
-        public List<Blog> Blogs { get; set; }
     }
 }

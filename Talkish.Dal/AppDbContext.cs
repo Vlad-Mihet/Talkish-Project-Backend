@@ -20,6 +20,11 @@ namespace Talkish.Dal
             builder.Entity<Topic>()
                 .HasIndex((topic) => topic.Name)
                 .IsUnique();
+
+            builder.Entity<Blog>()
+                .HasOne((blog) => blog.Author)
+                .WithMany((author) => author.Blogs)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

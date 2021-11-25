@@ -33,24 +33,35 @@ namespace Talkish.Dal.Repositories
 
         public async Task<List<Blog>> GetAuthorBlogsByAuthorIdAsync(int id)
         {
-            List<Blog> blogs = await _ctx.Blogs.Where((b) => b.AuthorId == id).Include((b) => b.Author).ToListAsync();
+            Author author = await _ctx.Authors
+                .Include((author) => author.Blogs)
+                .ThenInclude((blog) => blog.Topics)
+                .FirstOrDefaultAsync((author) => author.AuthorId == id);
+            List<Blog> blogs = author.Blogs
+                .ToList();
             return blogs;
         }
 
         public async Task<List<Author>> GetAllAuthorsAsync()
         {
-            return await _ctx.Authors.ToListAsync();
+            return await _ctx.Authors
+                .Include((author) => author.Blogs)
+                .ThenInclude((blog) => blog.Topics)
+                .ToListAsync();
         }
 
-        public async Task<Author> GetAuthorByIdAsync(int id)
+        public async Task<Author> GetAuthorByIdAsync(int Id)
         {
-            Author author = await _ctx.Authors.FindAsync(id);
+            Author author = await _ctx.Authors
+                .Include((author) => author.Blogs)
+                .ThenInclude((blog) => blog.Topics)
+                .FirstOrDefaultAsync((author) => author.AuthorId == Id);
             return author;
         }
 
         public async Task<Author> UpdateAuthorAsync(Author authorData)
         {
-            await Task.Run(() => _ctx.Authors.Update(authorData));
+            _ctx.Authors.Update(authorData);
             await _ctx.SaveChangesAsync();
             return authorData;
         }
