@@ -12,6 +12,9 @@ namespace Talkish.API.Profiles
             CreateMap<Topic, AddTopicDTO>()
                 .ReverseMap();
 
+            CreateMap<Topic, UpdateTopicDTO>()
+                .ReverseMap();
+
             CreateMap<Topic, TopicDTO>()
                     .ForMember(topicDTO => topicDTO.TopicName, opt => opt.MapFrom(topic => topic.Name));
         }

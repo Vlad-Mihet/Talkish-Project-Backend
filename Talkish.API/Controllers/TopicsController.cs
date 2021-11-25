@@ -37,26 +37,26 @@ namespace Talkish.API.Controllers
             return Ok(topicDTOs);
         }
 
-        [Route("{id}")]
+        [Route("{Id}")]
         [HttpGet]
-        public async Task<IActionResult> GetTopicById(int Id)
+        public async Task<IActionResult> GetTopicById([FromRoute] int Id)
         {
             Topic topic = await _service.GetTopicById(Id);
             TopicDTO topicDTO = _mapper.Map<TopicDTO>(topic);
             return Ok(topicDTO);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateTopic(Topic TopicData)
+        [HttpPatch]
+        public async Task<IActionResult> UpdateTopic([FromBody] UpdateTopicDTO TopicData)
         {
-            Topic topic = await _service.UpdateTopic(TopicData);
-            TopicDTO topicDTO = _mapper.Map<TopicDTO>(topic);
-            return Ok(topicDTO);
+            Topic topic = _mapper.Map<Topic>(TopicData);
+            await _service.UpdateTopic(topic);
+            return Ok(TopicData);
         }
 
-        [Route("{id}")]
+        [Route("{Id}")]
         [HttpDelete]
-        public async Task<IActionResult> DeleteTopic(int Id)
+        public async Task<IActionResult> DeleteTopic([FromRoute] int Id)
         {
             Topic topic = await _service.DeleteTopicById(Id);
             TopicDTO topicDTO = _mapper.Map<TopicDTO>(topic);
