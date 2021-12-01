@@ -26,6 +26,7 @@ namespace Talkish.Dal.Repositories
         public async Task<List<Publication>> GetAllPublicationsAsync()
         {
             List<Publication> publications = await _ctx.Publications
+                .Include((publication) => publication.Owner)
                 .ToListAsync();
             return publications;
         }
@@ -33,6 +34,17 @@ namespace Talkish.Dal.Repositories
         public async Task<Publication> GetPublicationByIdAsync(int Id)
         {
             Publication publication = await _ctx.Publications
+                .Include((publication) => publication.Owner)
+                .FirstOrDefaultAsync((publication) => publication.PublicationId == Id);
+            return publication;
+        }
+
+        public async Task<Publication> GetPublicationWithBlogsByIdAsync(int Id)
+        {
+            Publication publication = await _ctx.Publications
+                .Include((publication) => publication.Owner)
+                .Include((publication) => publication.Blogs)
+                .ThenInclude((blog) => blog.Author)
                 .FirstOrDefaultAsync((publication) => publication.PublicationId == Id);
             return publication;
         }
@@ -60,6 +72,7 @@ namespace Talkish.Dal.Repositories
         public async Task<Publication> DeletePublicationByIdAsync(int Id)
         {
             Publication publicationToDelete = await _ctx.Publications
+                .Include((publication) => publication.Owner)
                 .FirstOrDefaultAsync((publication) => publication.PublicationId == Id);
             _ctx.Publications.Remove(publicationToDelete);
             return publicationToDelete;

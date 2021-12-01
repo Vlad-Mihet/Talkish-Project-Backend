@@ -43,6 +43,11 @@ namespace Talkish.Services
             return await _repo.GetPublicationByIdAsync(Id);
         }
 
+        public async Task<Publication> GetPublicationWithBlogsById(int Id)
+        {
+            return await _repo.GetPublicationWithBlogsByIdAsync(Id);
+        }
+
         public async Task<Publication> UpdatePublication(Publication PublicationData)
         {
             return await _repo.UpdatePublicationAsync(PublicationData);

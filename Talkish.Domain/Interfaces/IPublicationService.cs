@@ -12,6 +12,8 @@ namespace Talkish.Domain.Interfaces
 
         Task<Publication> GetPublicationById(int Id);
 
+        Task<Publication> GetPublicationWithBlogsById(int Id);
+
         Task<List<Author>> GetPublicationAuthors(int Id);
 
         Task<List<Blog>> GetPublicationBlogs(int Id);

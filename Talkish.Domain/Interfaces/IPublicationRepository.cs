@@ -8,6 +8,8 @@ namespace Talkish.Domain.Interfaces
     {
         Task<Publication> GetPublicationByIdAsync(int Id);
 
+        Task<Publication> GetPublicationWithBlogsByIdAsync(int Id);
+
         Task<List<Publication>> GetAllPublicationsAsync();
 
         Task<List<Blog>> GetAllPublicationBlogsAsync(int Id);

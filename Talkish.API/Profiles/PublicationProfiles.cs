@@ -15,6 +15,8 @@ namespace Talkish.API.Profiles
                 .ReverseMap();
 
             CreateMap<Publication, PublicationDTO>();
+
+            CreateMap<Publication, PublicationWithBlogsDTO>();
         }
     }
 }

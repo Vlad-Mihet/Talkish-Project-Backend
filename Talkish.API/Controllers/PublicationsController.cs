@@ -47,6 +47,15 @@ namespace Talkish.API.Controllers
         }
 
         [HttpGet]
+        [Route("{Id}/With-Blogs")]
+        public async Task<IActionResult> GetPublicationWithBlogsById([FromRoute] int Id)
+        {
+            Publication publication = await _service.GetPublicationWithBlogsById(Id);
+            PublicationWithBlogsDTO publicationDTO = _mapper.Map<PublicationWithBlogsDTO>(publication);
+            return Ok(publicationDTO);
+        }
+
+        [HttpGet]
         [Route("{Id}/Authors")]
         public async Task<IActionResult> GetPublicationAuthors([FromRoute] int Id)
         {

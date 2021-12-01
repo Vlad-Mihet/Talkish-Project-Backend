@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Talkish.API.DTOs
 {
@@ -10,6 +11,7 @@ namespace Talkish.API.DTOs
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Publication must have an owner")]
+        [ForeignKey("Author")]
         public int OwnerId { get; set; }
     }
 }
