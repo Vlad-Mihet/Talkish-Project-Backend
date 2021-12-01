@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Talkish.API.DTOs;
 using Talkish.Domain.Interfaces;
 using Talkish.Domain.Models;
 
@@ -21,9 +22,10 @@ namespace Talkish.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePublication([FromBody] Publication PublicationData)
+        public async Task<IActionResult> CreatePublication([FromBody] AddPublicationDTO PublicationData)
         {
-            Publication publication = await _service.CreatePublication(PublicationData);
+            Publication publication = _mapper.Map<Publication>(PublicationData);
+            await _service.CreatePublication(publication);
             return Ok(publication);
         }
 
@@ -31,7 +33,8 @@ namespace Talkish.API.Controllers
         public async Task<IActionResult> GetAllPublications()
         {
             List<Publication> publications = await _service.GetAllPublications();
-            return Ok(publications);
+            List<PublicationDTO> publicationDTOs = _mapper.Map<List<PublicationDTO>>(publications);
+            return Ok(publicationDTOs);
         }
 
         [HttpGet]
@@ -39,7 +42,8 @@ namespace Talkish.API.Controllers
         public async Task<IActionResult> GetPublicationById([FromRoute] int Id)
         {
             Publication publication = await _service.GetPublicationById(Id);
-            return Ok(publication);
+            PublicationDTO publicationDTO = _mapper.Map<PublicationDTO>(publication);
+            return Ok(publicationDTO);
         }
 
         [HttpGet]
@@ -47,7 +51,8 @@ namespace Talkish.API.Controllers
         public async Task<IActionResult> GetPublicationAuthors([FromRoute] int Id)
         {
             List<Author> authors = await _service.GetPublicationAuthors(Id);
-            return Ok(authors);
+            List<AuthorDTO> authorDTOs = _mapper.Map<List<AuthorDTO>>(authors);
+            return Ok(authorDTOs);
         }
 
         [HttpGet]
@@ -55,13 +60,15 @@ namespace Talkish.API.Controllers
         public async Task<IActionResult> GetPublicationBlogs([FromRoute] int Id)
         {
             List<Blog> blogs = await _service.GetPublicationBlogs(Id);
-            return Ok(blogs);
+            List<BlogDTO> blogDTOs = _mapper.Map<List<BlogDTO>>(blogs);
+            return Ok(blogDTOs);
         }
 
         [HttpPatch]
-        public async Task<IActionResult> UpdatePublication([FromBody] Publication PublicationData)
+        public async Task<IActionResult> UpdatePublication([FromBody] UpdatePublicationDTO PublicationData)
         {
-            Publication publication = await _service.UpdatePublication(PublicationData);
+            Publication publication = _mapper.Map<Publication>(PublicationData);
+            await _service.UpdatePublication(publication);
             return Ok(publication);
         }
 
@@ -86,7 +93,8 @@ namespace Talkish.API.Controllers
         public async Task<IActionResult> DeletePublication([FromRoute] int Id)
         {
             Publication publication = await _service.DeletePublication(Id);
-            return Ok(publication);
+            PublicationDTO publicationDTO = _mapper.Map<PublicationDTO>(publication);
+            return Ok(publicationDTO);
         }
     }
 }
