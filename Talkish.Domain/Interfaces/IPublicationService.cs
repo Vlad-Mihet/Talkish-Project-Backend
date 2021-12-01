@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Talkish.Domain.Models;
 
@@ -20,6 +17,10 @@ namespace Talkish.Domain.Interfaces
         Task<List<Blog>> GetPublicationBlogs(int Id);
 
         Task<Publication> UpdatePublication(Publication PublicationData);
+
+        Task<Publication> AddAuthorToPublication(int PublicationId, int AuthorId);
+
+        Task<Publication> AddBlogToPublication(int PublicationId, int BlogId);
 
         Task<Publication> DeletePublication(int Id);
     }

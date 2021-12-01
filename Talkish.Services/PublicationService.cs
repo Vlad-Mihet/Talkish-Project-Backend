@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Talkish.Domain.Interfaces;
 using Talkish.Domain.Models;
@@ -49,6 +46,16 @@ namespace Talkish.Services
         public async Task<Publication> UpdatePublication(Publication PublicationData)
         {
             return await _repo.UpdatePublicationAsync(PublicationData);
+        }
+
+        public async Task<Publication> AddBlogToPublication(int PublicationId, int BlogId)
+        {
+            return await _repo.AddBlogToPublicationAsync(PublicationId, BlogId);
+        }
+
+        public async Task<Publication> AddAuthorToPublication(int PublicationId, int AuthorId)
+        {
+            return await _repo.AddAuthorToPublicationAsync(PublicationId, AuthorId);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Talkish.API.Controllers
     {
         private readonly IPublicationService _service;
         private readonly IMapper _mapper;
-    
+
         public PublicationsController(IPublicationService service, IMapper mapper)
         {
             _service = service;
@@ -62,6 +62,22 @@ namespace Talkish.API.Controllers
         public async Task<IActionResult> UpdatePublication([FromBody] Publication PublicationData)
         {
             Publication publication = await _service.UpdatePublication(PublicationData);
+            return Ok(publication);
+        }
+
+        [HttpPatch]
+        [Route("{PublicationId}/Add-Blog/{BlogId}")]
+        public async Task<IActionResult> AddBlogToPublication([FromRoute] int PublicationId, [FromRoute] int BlogId)
+        {
+            Publication publication = await _service.AddBlogToPublication(PublicationId, BlogId);
+            return Ok(publication);
+        }
+
+        [HttpPatch]
+        [Route("{PublicationId}/Add-Author/{AuthorId}")]
+        public async Task<IActionResult> AddAuthorToPublication([FromRoute] int PublicationId, [FromRoute] int AuthorId)
+        {
+            Publication publication = await _service.AddAuthorToPublication(PublicationId, AuthorId);
             return Ok(publication);
         }
 

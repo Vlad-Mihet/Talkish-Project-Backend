@@ -71,5 +71,29 @@ namespace Talkish.Dal.Repositories
             await _ctx.SaveChangesAsync();
             return PublicationData;
         }
+
+        public async Task<Publication> AddBlogToPublicationAsync(int PublicationId, int BlogId)
+        {
+            Blog blog = await _ctx.Blogs
+                .FirstOrDefaultAsync((blog) => blog.BlogId == BlogId);
+            Publication publication = await _ctx.Publications
+                .Include((publication) => publication.Blogs)
+                .FirstOrDefaultAsync((publication) => publication.PublicationId == PublicationId);
+            publication.Blogs.Add(blog);
+            await _ctx.SaveChangesAsync();
+            return publication;
+        }
+
+        public async Task<Publication> AddAuthorToPublicationAsync(int PublicationId, int AuthorId)
+        {
+            Author author = await _ctx.Authors
+                .FirstOrDefaultAsync((author) => author.AuthorId == AuthorId);
+            Publication publication = await _ctx.Publications
+                .Include((publication) => publication.Authors)
+                .FirstOrDefaultAsync((publication) => publication.PublicationId == PublicationId);
+            publication.Authors.Add(author);
+            await _ctx.SaveChangesAsync();
+            return publication;
+        }
     }
 }

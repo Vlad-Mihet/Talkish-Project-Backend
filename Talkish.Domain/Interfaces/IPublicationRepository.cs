@@ -18,6 +18,10 @@ namespace Talkish.Domain.Interfaces
 
         Task<Publication> UpdatePublicationAsync(Publication PublicationData);
 
+        Task<Publication> AddAuthorToPublicationAsync(int PublicationId, int AuthorId);
+
+        Task<Publication> AddBlogToPublicationAsync(int PublicationId, int BlogId);
+
         Task<Publication> DeletePublicationByIdAsync(int Id);
     }
 }
