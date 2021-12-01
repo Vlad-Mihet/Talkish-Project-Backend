@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Talkish.Domain.Models;
+﻿using Talkish.Domain.Models;
 
 namespace Talkish.API.DTOs
 {
