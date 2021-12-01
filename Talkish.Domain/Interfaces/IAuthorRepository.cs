@@ -1,20 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Talkish.API.Models;
+using Talkish.Domain.Models;
 
-namespace Talkish.API.Interfaces
+namespace Talkish.Domain.Interfaces
 {
     public interface IAuthorRepository
     {
-        Task<Author> GetAuthorByIdAsync(int id);
+        Task<Author> GetAuthorByIdAsync(int Id);
 
-        Task<Author> CreateAuthorAsync(Author author);
+        Task<Author> CreateAuthorAsync(Author Author);
 
-        Task<Author> DeleteAuthorByIdAsync(int id);
+        Task<Author> DeleteAuthorByIdAsync(int Id);
 
-        Task<List<Blog>> GetAuthorBlogsByAuthorIdAsync(int id);
+        Task<List<Blog>> GetAuthorBlogsByAuthorIdAsync(int Id);
 
-        Task<Author> UpdateAuthorAsync(Author author);
+        Task<Author> UpdateAuthorAsync(Author Author);
 
         Task<List<Author>> GetAllAuthorsAsync();
     }

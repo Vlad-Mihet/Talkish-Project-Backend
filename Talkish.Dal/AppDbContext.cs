@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Talkish.API.Models;
+using Talkish.Domain.Models;
 
 namespace Talkish.Dal
 {
@@ -15,6 +15,8 @@ namespace Talkish.Dal
 
         public DbSet<Topic> Topics { get; set; }
 
+        public DbSet<Publication> Publications { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Topic>()
@@ -25,6 +27,10 @@ namespace Talkish.Dal
                 .HasOne((blog) => blog.Author)
                 .WithMany((author) => author.Blogs)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Publication>()
+                .HasIndex((publication) => publication.Name)
+                .IsUnique();
         }
     }
 }

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Talkish.API.Interfaces;
-using Talkish.API.Models;
+using Talkish.Domain.Interfaces;
+using Talkish.Domain.Models;
 
 namespace Talkish.Dal.Repositories
 {
@@ -18,7 +18,7 @@ namespace Talkish.Dal.Repositories
 
         public async Task<Author> CreateAuthorAsync(Author author)
         {
-            await _ctx.Authors.AddAsync(author);
+            _ctx.Authors.Add(author);
             await _ctx.SaveChangesAsync();
             return author;
         }
