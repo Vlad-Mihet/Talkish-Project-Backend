@@ -18,7 +18,7 @@ namespace Talkish.Dal.Repositories
 
         public async Task<Author> CreateAuthorAsync(Author author)
         {
-            await _ctx.Authors.AddAsync(author);
+            _ctx.Authors.Add(author);
             await _ctx.SaveChangesAsync();
             return author;
         }

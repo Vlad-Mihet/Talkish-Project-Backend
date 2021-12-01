@@ -44,9 +44,11 @@ namespace Talkish.API
             services.AddScoped<IBlogRepository, BlogRepository>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<ITopicRepository, TopicRepository>();
+            services.AddScoped<IPublicationRepository, PublicationRepository>();
             services.AddScoped<IBlogService, BlogService>();
             services.AddScoped<IAuthorService, AuthorService>();
             services.AddScoped<ITopicService, TopicService>();
+            services.AddScoped<IPublicationService, PublicationService>();
             services.AddAutoMapper(typeof(Startup));
         }
 

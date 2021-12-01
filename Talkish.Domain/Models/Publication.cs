@@ -20,6 +20,8 @@ namespace Talkish.Domain.Models
         // in the future
         public Author Owner { get; set; }
 
+        public List<Author> Authors { get; set; }
+
         public List<Blog> Blogs { get; set; }
     }
 }
