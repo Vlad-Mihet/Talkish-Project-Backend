@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Talkish.API.Models;
+using Talkish.Domain.Models;
 using Talkish.API.DTOs;
 
 
@@ -16,7 +16,7 @@ namespace Talkish.API.Profiles
                 .ReverseMap();
 
             CreateMap<Topic, TopicDTO>()
-                    .ForMember(topicDTO => topicDTO.TopicName, opt => opt.MapFrom(topic => topic.Name));
+                .ForMember(topicDTO => topicDTO.TopicName, opt => opt.MapFrom(topic => topic.Name));
         }
     }
 }
