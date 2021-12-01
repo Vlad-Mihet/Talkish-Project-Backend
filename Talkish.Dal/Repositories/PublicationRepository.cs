@@ -75,6 +75,7 @@ namespace Talkish.Dal.Repositories
                 .Include((publication) => publication.Owner)
                 .FirstOrDefaultAsync((publication) => publication.PublicationId == Id);
             _ctx.Publications.Remove(publicationToDelete);
+            await _ctx.SaveChangesAsync();
             return publicationToDelete;
         }
 

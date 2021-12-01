@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Talkish.Domain.Models
 {
@@ -13,7 +14,7 @@ namespace Talkish.Domain.Models
         [Display(Name = "Publication Name")]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "Publication must have an owner")]
+        [ForeignKey("Author")]
         public int OwnerId { get; set; }
         
         // The owner will be a user identity
