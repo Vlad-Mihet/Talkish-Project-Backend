@@ -43,11 +43,13 @@ namespace Talkish.Dal.Repositories
             return topic;
         }
 
-        public async Task<Topic> UpdateTopicAsync(Topic TopicData)
+        public async Task<Topic> UpdateTopicAsync(int TopicId, Topic TopicData)
         {
-            _ctx.Topics.Update(TopicData);
+            Topic topic = await _ctx.Topics.FirstOrDefaultAsync((topic) => topic.TopicId == TopicId);
+            topic.Name = TopicData.Name;
+            _ctx.Topics.Update(topic);
             await _ctx.SaveChangesAsync();
-            return TopicData;
+            return topic;
         }
     }
 }

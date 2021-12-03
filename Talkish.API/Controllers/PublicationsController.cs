@@ -74,24 +74,25 @@ namespace Talkish.API.Controllers
         }
 
         [HttpPatch]
-        public async Task<IActionResult> UpdatePublication([FromBody] UpdatePublicationDTO PublicationData)
+        [Route("{PublicationId}")]
+        public async Task<IActionResult> UpdatePublication([FromRoute] int PublicationId, [FromBody] UpdatePublicationDTO PublicationData)
         {
             Publication publication = _mapper.Map<Publication>(PublicationData);
-            await _service.UpdatePublication(publication);
+            await _service.UpdatePublication(PublicationId, publication);
             return Ok(publication);
         }
 
-        [HttpPatch]
-        [Route("{PublicationId}/Add-Blog/{BlogId}")]
-        public async Task<IActionResult> AddBlogToPublication([FromRoute] int PublicationId, [FromRoute] int BlogId)
+        [HttpPost]
+        [Route("{PublicationId}/Blogs")]
+        public async Task<IActionResult> AddBlogToPublication([FromRoute] int PublicationId, [FromBody] int BlogId)
         {
             Publication publication = await _service.AddBlogToPublication(PublicationId, BlogId);
             return Ok(publication);
         }
 
-        [HttpPatch]
-        [Route("{PublicationId}/Add-Author/{AuthorId}")]
-        public async Task<IActionResult> AddAuthorToPublication([FromRoute] int PublicationId, [FromRoute] int AuthorId)
+        [HttpPost]
+        [Route("{PublicationId}/Authors")]
+        public async Task<IActionResult> AddAuthorToPublication([FromRoute] int PublicationId, [FromBody] int AuthorId)
         {
             Publication publication = await _service.AddAuthorToPublication(PublicationId, AuthorId);
             return Ok(publication);

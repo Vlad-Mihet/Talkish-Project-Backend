@@ -12,7 +12,7 @@ namespace Talkish.Domain.Interfaces
 
         Task<Topic> CreateTopicAsync(Topic TopicData);
 
-        Task<Topic> UpdateTopicAsync(Topic TopicData);
+        Task<Topic> UpdateTopicAsync(int TopicId, Topic TopicData);
 
         Task<Topic> DeleteTopicByIdAsync(int Id);
     }

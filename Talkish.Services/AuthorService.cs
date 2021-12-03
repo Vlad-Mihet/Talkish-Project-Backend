@@ -44,9 +44,9 @@ namespace Talkish.Services
             return author;
         }
 
-        public async Task<Author> UpdateAuthor(Author AuthorData)
+        public async Task<Author> UpdateAuthor(int AuthorId, Author AuthorData)
         {
-            Author author = await _repo.UpdateAuthorAsync(AuthorData);
+            Author author = await _repo.UpdateAuthorAsync(AuthorId, AuthorData);
             return author;
         }
     }

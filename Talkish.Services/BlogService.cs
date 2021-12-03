@@ -53,9 +53,9 @@ namespace Talkish.Services
             return topics;
         }
 
-        public async Task<Blog> UpdateBlog(Blog BlogData)
+        public async Task<Blog> UpdateBlog(int BlogId, Blog BlogData)
         {
-            Blog blog = await _repo.UpdateBlogAsync(BlogData);
+            Blog blog = await _repo.UpdateBlogAsync(BlogId, BlogData);
             return blog;
         }
 

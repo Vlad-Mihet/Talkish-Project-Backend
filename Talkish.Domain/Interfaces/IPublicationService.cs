@@ -18,7 +18,7 @@ namespace Talkish.Domain.Interfaces
 
         Task<List<Blog>> GetPublicationBlogs(int Id);
 
-        Task<Publication> UpdatePublication(Publication PublicationData);
+        Task<Publication> UpdatePublication(int PublicationId, Publication PublicationData);
 
         Task<Publication> AddAuthorToPublication(int PublicationId, int AuthorId);
 

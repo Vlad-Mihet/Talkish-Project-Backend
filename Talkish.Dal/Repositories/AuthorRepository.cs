@@ -59,11 +59,15 @@ namespace Talkish.Dal.Repositories
             return author;
         }
 
-        public async Task<Author> UpdateAuthorAsync(Author authorData)
+        public async Task<Author> UpdateAuthorAsync(int AuthorId, Author AuthorData)
         {
-            _ctx.Authors.Update(authorData);
+            Author author = await _ctx.Authors.FirstOrDefaultAsync((author) => author.AuthorId == AuthorId);
+            author.FirstName = AuthorData.FirstName;
+            author.LastName = AuthorData.LastName;
+            author.Email = AuthorData.Email;
+            _ctx.Authors.Update(author);
             await _ctx.SaveChangesAsync();
-            return authorData;
+            return author;
         }
     }
 }

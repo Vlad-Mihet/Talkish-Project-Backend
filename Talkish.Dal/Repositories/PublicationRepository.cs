@@ -79,11 +79,13 @@ namespace Talkish.Dal.Repositories
             return publicationToDelete;
         }
 
-        public async Task<Publication> UpdatePublicationAsync(Publication PublicationData)
+        public async Task<Publication> UpdatePublicationAsync(int PublicationId, Publication PublicationData)
         {
-            _ctx.Publications.Update(PublicationData);
+            Publication publication = await _ctx.Publications.FirstOrDefaultAsync((publication) => publication.PublicationId == PublicationId);
+            publication.Name = PublicationData.Name;
+            _ctx.Publications.Update(publication);
             await _ctx.SaveChangesAsync();
-            return PublicationData;
+            return publication;
         }
 
         public async Task<Publication> AddBlogToPublicationAsync(int PublicationId, int BlogId)
