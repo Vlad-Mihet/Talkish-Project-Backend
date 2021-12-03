@@ -59,11 +59,14 @@ namespace Talkish.Dal.Repositories
             return blog.Topics;
         }
 
-        public async Task<Blog> UpdateBlogAsync(Blog blogData)
+        public async Task<Blog> UpdateBlogAsync(int BlogId, Blog BlogData)
         {
-            _ctx.Blogs.Update(blogData);
+            Blog blog = await _ctx.Blogs.FirstOrDefaultAsync((blog) => blog.BlogId == BlogId);
+            blog.Title = BlogData.Title;
+            blog.Content = BlogData.Content;
+            _ctx.Blogs.Update(blog);
             await _ctx.SaveChangesAsync();
-            return blogData;
+            return blog;
         }
 
         public async Task<Blog> AddTopicToBlogAsync(int Id, int TopicId)

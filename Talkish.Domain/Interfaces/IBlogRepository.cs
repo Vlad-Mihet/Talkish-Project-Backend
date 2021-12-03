@@ -10,7 +10,7 @@ namespace Talkish.Domain.Interfaces
 
         Task<List<Blog>> GetAllBlogsAsync();
 
-        Task<Blog> UpdateBlogAsync(Blog blogData);
+        Task<Blog> UpdateBlogAsync(int BlogId, Blog blogData);
 
         Task<Blog> AddTopicToBlogAsync(int Id, int TopicId);
 

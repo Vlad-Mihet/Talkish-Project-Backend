@@ -18,7 +18,7 @@ namespace Talkish.Domain.Interfaces
 
         Task<Publication> CreatePublicationAsync(Publication PublicationData);
 
-        Task<Publication> UpdatePublicationAsync(Publication PublicationData);
+        Task<Publication> UpdatePublicationAsync(int PublicationId, Publication PublicationData);
 
         Task<Publication> AddAuthorToPublicationAsync(int PublicationId, int AuthorId);
 

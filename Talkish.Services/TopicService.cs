@@ -33,9 +33,9 @@ namespace Talkish.Services
             return topic;
         }
 
-        public async Task<Topic> UpdateTopic(Topic TopicData)
+        public async Task<Topic> UpdateTopic(int TopicId, Topic TopicData)
         {
-            Topic topic = await _repo.UpdateTopicAsync(TopicData);
+            Topic topic = await _repo.UpdateTopicAsync(TopicId, TopicData);
             return topic;
         }
 

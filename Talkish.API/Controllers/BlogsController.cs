@@ -56,10 +56,11 @@ namespace Talkish.API.Controllers
         }
 
         [HttpPatch]
-        public async Task<IActionResult> UpdateBlog([FromBody] UpdateBlogDTO BlogData)
+        [Route("{BlogId}")]
+        public async Task<IActionResult> UpdateBlog([FromRoute] int BlogId, [FromBody] UpdateBlogDTO BlogData)
         {
             Blog blog = _mapper.Map<Blog>(BlogData);
-            await _service.UpdateBlog(blog);
+            await _service.UpdateBlog(BlogId, blog);
             return Ok(blog);
         }
 

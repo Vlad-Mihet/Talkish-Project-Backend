@@ -47,10 +47,11 @@ namespace Talkish.API.Controllers
         }
 
         [HttpPatch]
-        public async Task<IActionResult> UpdateTopic([FromBody] UpdateTopicDTO TopicData)
+        [Route("{TopicId}")]
+        public async Task<IActionResult> UpdateTopic([FromRoute] int TopicId, [FromBody] UpdateTopicDTO TopicData)
         {
             Topic topic = _mapper.Map<Topic>(TopicData);
-            await _service.UpdateTopic(topic);
+            await _service.UpdateTopic(TopicId, topic);
             return Ok(TopicData);
         }
 

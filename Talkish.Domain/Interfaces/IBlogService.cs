@@ -14,7 +14,7 @@ namespace Talkish.Domain.Interfaces
 
         Task<List<Topic>> GetBlogTopicsById(int Id);
 
-        Task<Blog> UpdateBlog(Blog BlogData);
+        Task<Blog> UpdateBlog(int BlogId, Blog BlogData);
 
         Task<Blog> AddTopicToBlog(int BlogId, int TopicId);
 
