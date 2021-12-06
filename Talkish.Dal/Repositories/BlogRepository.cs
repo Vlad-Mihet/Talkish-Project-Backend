@@ -25,7 +25,7 @@ namespace Talkish.Dal.Repositories
 
         public async Task<Blog> DeleteBlogByIdAsync(int Id)
         {
-            Blog blogToRemove = await _ctx.Blogs.FirstOrDefaultAsync((b) => b.AuthorId == Id);
+            Blog blogToRemove = await _ctx.Blogs.FirstOrDefaultAsync((b) => b.BlogId == Id);
             _ctx.Blogs.Remove(blogToRemove);
             await _ctx.SaveChangesAsync();
             return blogToRemove;

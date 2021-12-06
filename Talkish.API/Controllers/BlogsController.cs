@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Talkish.API.DTOs;
+using Talkish.API.Responses;
 using Talkish.Domain.Interfaces;
 using Talkish.Domain.Models;
 
@@ -28,10 +29,24 @@ namespace Talkish.API.Controllers
             Blog blog = await _service.GetBlogById(Id);
             if (blog == null)
             {
-                return NotFound("Blog not found");
+                ErrorResponse error = new()
+                {
+                    ErrorMessage = "Blog not found",
+                    Errors = new List<string>(),
+                    Status = 404,
+                };
+
+                return NotFound(error);
             }
             BlogDTO blogDTO = _mapper.Map<BlogDTO>(blog);
-            return Ok(blogDTO);
+
+            SuccessResponse response = new()
+            {
+                Payload = blogDTO,
+                Status = 200
+            };
+
+            return Ok(response);
         }
 
         [HttpGet]
@@ -51,13 +66,31 @@ namespace Talkish.API.Controllers
             return Ok(topicDTOs);
         }
 
-        [Route("", Name = "createBlogRoute")]
         [HttpPost]
         public async Task<IActionResult> CreateBlog([FromBody] AddBlogDTO BlogData)
         {
             Blog blog = _mapper.Map<Blog>(BlogData);
             await _service.CreateBlog(blog);
-            return Created("createBlogRoute", BlogData);
+
+            if (blog == null)
+            {
+                ErrorResponse error = new()
+                {
+                    ErrorMessage = "Couldn't create blog, please try again later",
+                    Errors = new List<string>(),
+                    Status = 409,
+                };
+
+                return Conflict(error);
+            }
+
+            SuccessResponse response = new()
+            {
+                Payload = BlogData,
+                Status = 201
+            };
+
+            return StatusCode(201, response);
         }
 
         [Route("{BlogId}")]
@@ -66,7 +99,26 @@ namespace Talkish.API.Controllers
         {
             Blog blog = _mapper.Map<Blog>(BlogData);
             await _service.UpdateBlog(BlogId, blog);
-            return NoContent();
+
+            if (blog == null)
+            {
+                ErrorResponse error = new()
+                {
+                    ErrorMessage = "Couldn't update blog, please try again later",
+                    Errors = new List<string>(),
+                    Status = 409,
+                };
+
+                return Conflict(error);
+            }
+
+            SuccessResponse response = new()
+            {
+                Payload = BlogData,
+                Status = 200
+            };
+
+            return Ok(response);
         }
 
         [Route("{BlogId}/add-topic/{TopicId}")]
@@ -75,7 +127,26 @@ namespace Talkish.API.Controllers
         {
             Blog blog = await _service.AddTopicToBlog(BlogId, TopicId);
             BlogDTO blogDTO = _mapper.Map<BlogDTO>(blog);
-            return Ok(blogDTO);
+
+            if (blog == null)
+            {
+                ErrorResponse error = new()
+                {
+                    ErrorMessage = "Couldn't add topic to blog, please try again later",
+                    Errors = new List<string>(),
+                    Status = 400,
+                };
+
+                return Conflict(error);
+            }
+
+            SuccessResponse response = new()
+            {
+                Payload = blogDTO,
+                Status = 200
+            };
+
+            return Ok(response);
         }
 
         [Route("{Id}")]
@@ -84,7 +155,26 @@ namespace Talkish.API.Controllers
         {
             Blog blog = await _service.DeleteBlogById(Id);
             BlogDTO blogDTO = _mapper.Map<BlogDTO>(blog);
-            return Ok(blogDTO);
+
+            if (blog == null)
+            {
+                ErrorResponse error = new()
+                {
+                    ErrorMessage = "Couldn't remove blog, please try again later",
+                    Errors = new List<string>(),
+                    Status = 409,
+                };
+
+                return Conflict(error);
+            }
+
+            SuccessResponse response = new()
+            {
+                Payload = blogDTO,
+                Status = 200
+            };
+
+            return Ok(response);
         }
     }
 }
