@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Talkish.Domain.Exceptions;
 using Talkish.Domain.Interfaces;
 using Talkish.Domain.Models;
 
@@ -29,6 +30,11 @@ namespace Talkish.Services
 
         public async Task<Blog> GetBlogById(int Id) {
             Blog blog = await _repo.GetBlogByIdAsync(Id);
+            if (blog == null)
+            {
+                return blog;
+            }
+
             blog.ReadingTime = GetBlogReadingTime(blog.Content);
 
             return blog;

@@ -21,11 +21,15 @@ namespace Talkish.API.Controllers
             _mapper = mapper;
         }
 
-        [Route("{Id}")]
+        [Route("{Id}", Name = "getBlogById")]
         [HttpGet]
         public async Task<IActionResult> GetBlogById([FromRoute] int Id)
         {
             Blog blog = await _service.GetBlogById(Id);
+            if (blog == null)
+            {
+                return NotFound("Blog not found");
+            }
             BlogDTO blogDTO = _mapper.Map<BlogDTO>(blog);
             return Ok(blogDTO);
         }
@@ -47,21 +51,22 @@ namespace Talkish.API.Controllers
             return Ok(topicDTOs);
         }
 
+        [Route("", Name = "createBlogRoute")]
         [HttpPost]
         public async Task<IActionResult> CreateBlog([FromBody] AddBlogDTO BlogData)
         {
             Blog blog = _mapper.Map<Blog>(BlogData);
             await _service.CreateBlog(blog);
-            return Ok(BlogData);
+            return Created("createBlogRoute", BlogData);
         }
 
-        [HttpPatch]
         [Route("{BlogId}")]
+        [HttpPatch]
         public async Task<IActionResult> UpdateBlog([FromRoute] int BlogId, [FromBody] UpdateBlogDTO BlogData)
         {
             Blog blog = _mapper.Map<Blog>(BlogData);
             await _service.UpdateBlog(BlogId, blog);
-            return Ok(blog);
+            return NoContent();
         }
 
         [Route("{BlogId}/add-topic/{TopicId}")]
