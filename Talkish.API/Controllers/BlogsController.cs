@@ -22,7 +22,7 @@ namespace Talkish.API.Controllers
             _mapper = mapper;
         }
 
-        [Route("{Id}", Name = "getBlogById")]
+        [Route("{Id}")]
         [HttpGet]
         public async Task<IActionResult> GetBlogById([FromRoute] int Id)
         {
@@ -54,7 +54,14 @@ namespace Talkish.API.Controllers
         {
             List<Blog> blogs = await _service.GetAllBlogs();
             List<BlogDTO> blogDTOs = _mapper.Map<List<BlogDTO>>(blogs);
-            return Ok(blogDTOs);
+
+            SuccessResponse response = new()
+            {
+                Payload = blogDTOs,
+                Status = 200
+            };
+
+            return Ok(response);
         }
 
         [Route("{Id}/topics")]
@@ -63,7 +70,26 @@ namespace Talkish.API.Controllers
         {
             List<Topic> topics = await _service.GetBlogTopicsById(Id);
             List<TopicDTO> topicDTOs = _mapper.Map<List<TopicDTO>>(topics);
-            return Ok(topicDTOs);
+
+            if (topics == null)
+            {
+                ErrorResponse error = new()
+                {
+                    ErrorMessage = "Couldn't find blog, please try again later",
+                    Errors = new List<string>(),
+                    Status = 400,
+                };
+
+                return BadRequest(error);
+            }
+
+            SuccessResponse response = new()
+            {
+                Payload = topicDTOs,
+                Status = 200
+            };
+
+            return StatusCode(200, response);
         }
 
         [HttpPost]
@@ -90,7 +116,7 @@ namespace Talkish.API.Controllers
                 Status = 201
             };
 
-            return StatusCode(201, response);
+            return CreatedAtAction(nameof(GetBlogById), response);
         }
 
         [Route("{BlogId}")]
@@ -106,10 +132,10 @@ namespace Talkish.API.Controllers
                 {
                     ErrorMessage = "Couldn't update blog, please try again later",
                     Errors = new List<string>(),
-                    Status = 409,
+                    Status = 400,
                 };
 
-                return Conflict(error);
+                return BadRequest(error);
             }
 
             SuccessResponse response = new()
@@ -121,8 +147,8 @@ namespace Talkish.API.Controllers
             return Ok(response);
         }
 
-        [Route("{BlogId}/add-topic/{TopicId}")]
-        [HttpPut]
+        [Route("{BlogId}/topics/{TopicId}")]
+        [HttpPost]
         public async Task<IActionResult> AddTopicToBlog([FromRoute] int BlogId, [FromRoute] int TopicId)
         {
             Blog blog = await _service.AddTopicToBlog(BlogId, TopicId);
@@ -137,7 +163,7 @@ namespace Talkish.API.Controllers
                     Status = 400,
                 };
 
-                return Conflict(error);
+                return BadRequest(error);
             }
 
             SuccessResponse response = new()
@@ -154,19 +180,20 @@ namespace Talkish.API.Controllers
         public async Task<IActionResult> DeleteBlogById([FromRoute] int Id)
         {
             Blog blog = await _service.DeleteBlogById(Id);
-            BlogDTO blogDTO = _mapper.Map<BlogDTO>(blog);
 
             if (blog == null)
             {
                 ErrorResponse error = new()
                 {
-                    ErrorMessage = "Couldn't remove blog, please try again later",
+                    ErrorMessage = "The blog you are currently trying to remove doesn't exist",
                     Errors = new List<string>(),
-                    Status = 409,
+                    Status = 400,
                 };
 
-                return Conflict(error);
+                return BadRequest(error);
             }
+
+            BlogDTO blogDTO = _mapper.Map<BlogDTO>(blog);
 
             SuccessResponse response = new()
             {
