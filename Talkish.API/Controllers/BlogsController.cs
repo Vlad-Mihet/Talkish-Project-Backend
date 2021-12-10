@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Talkish.API.DTOs;
 using Talkish.API.Responses;
@@ -95,28 +96,32 @@ namespace Talkish.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateBlog([FromBody] AddBlogDTO BlogData)
         {
-            Blog blog = _mapper.Map<Blog>(BlogData);
-            await _service.CreateBlog(blog);
-
-            if (blog == null)
+            if (ModelState.IsValid)
             {
-                ErrorResponse error = new()
+                Blog blog = _mapper.Map<Blog>(BlogData);
+                await _service.CreateBlog(blog);
+
+
+                SuccessResponse response = new()
                 {
-                    ErrorMessage = "Couldn't create blog, please try again later",
-                    Errors = new List<string>(),
-                    Status = 409,
+                    Payload = BlogData,
+                    Status = 201
                 };
 
-                return Conflict(error);
-            }
-
-            SuccessResponse response = new()
+                return CreatedAtAction(nameof(GetBlogById), response);
+            } else
             {
-                Payload = BlogData,
-                Status = 201
-            };
+                List<string> errors = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage)).ToList();
 
-            return CreatedAtAction(nameof(GetBlogById), response);
+                ErrorResponse error = new()
+                {
+                    ErrorMessage = "Invalid Blog Data",
+                    Errors = new List<string>(errors),
+                    Status = 400,
+                };
+
+                return BadRequest(error);
+            }
         }
 
         [Route("{BlogId}")]

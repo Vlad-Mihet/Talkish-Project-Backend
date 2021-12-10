@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Talkish.API.Filters;
 using Talkish.Dal;
 using Talkish.Dal.Repositories;
 using Talkish.Domain.Interfaces;
@@ -41,6 +43,7 @@ namespace Talkish.API
             var connectionString = Configuration.GetConnectionString("Default");
 
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
+            services.AddScoped<ValidationActionFilter>();
             services.AddScoped<IBlogRepository, BlogRepository>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<ITopicRepository, TopicRepository>();
@@ -50,6 +53,12 @@ namespace Talkish.API
             services.AddScoped<ITopicService, TopicService>();
             services.AddScoped<IPublicationService, PublicationService>();
             services.AddAutoMapper(typeof(Startup));
+
+            // Suppress Automatic Validation Bad Request Response
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

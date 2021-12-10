@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Talkish.API.DTOs;
+using Talkish.API.Responses;
 using Talkish.Domain.Interfaces;
 using Talkish.Domain.Models;
 
@@ -24,9 +25,30 @@ namespace Talkish.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAuthor([FromBody] AddAuthorDTO AuthorData)
         {
-            Author author = _mapper.Map<Author>(AuthorData);
-            await _service.CreateAuthor(author);
-            return Ok(author);
+            if (ModelState.IsValid)
+            {
+                Author author = _mapper.Map<Author>(AuthorData);
+                await _service.CreateAuthor(author);
+
+
+                SuccessResponse response = new()
+                {
+                    Payload = AuthorData,
+                    Status = 201
+                };
+
+                return CreatedAtAction(nameof(GetAuthorById), response);
+            } else
+            {
+                ErrorResponse error = new()
+                {
+                    ErrorMessage = "Invalid Author Data",
+                    Errors = new List<string>(),
+                    Status = 400,
+                };
+
+                return BadRequest(error);
+            }
         }
 
         [HttpGet]
