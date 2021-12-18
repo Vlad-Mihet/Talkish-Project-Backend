@@ -99,7 +99,7 @@ namespace Talkish.API.Controllers
             if (ModelState.IsValid)
             {
                 Blog blog = _mapper.Map<Blog>(BlogData);
-                await _service.CreateBlog(blog);
+                Blog createdBlog = await _service.CreateBlog(blog);
 
 
                 SuccessResponse response = new()
@@ -108,7 +108,7 @@ namespace Talkish.API.Controllers
                     Status = 201
                 };
 
-                return CreatedAtAction(nameof(GetBlogById), new { Id = blog.BlogId }, response);
+                return CreatedAtAction(nameof(GetBlogById), new { Id = createdBlog.BlogId }, response);
             } else
             {
                 List<string> errors = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage)).ToList();
@@ -141,19 +141,18 @@ namespace Talkish.API.Controllers
                 };
 
                 return Ok(response);
-            } else 
-            {
-                List<string> errors = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage)).ToList();
-
-                ErrorResponse error = new()
-                {
-                    ErrorMessage = "Invalid Blog Data",
-                    Errors = new List<string>(errors),
-                    Status = 400,
-                };
-
-                return BadRequest(error);
             }
+
+            List<string> errors = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage)).ToList();
+
+            ErrorResponse error = new()
+            {
+                ErrorMessage = "Invalid Blog Data",
+                Errors = new List<string>(errors),
+                Status = 400,
+            };
+
+            return BadRequest(error);
         }
 
         [Route("{BlogId}/topics/{TopicId}")]

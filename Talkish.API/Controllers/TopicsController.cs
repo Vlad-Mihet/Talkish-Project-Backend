@@ -29,7 +29,7 @@ namespace Talkish.API.Controllers
             if (ModelState.IsValid)
             {
                 Topic topic = _mapper.Map<Topic>(TopicData);
-                await _service.CreateTopic(topic);
+                Topic createdTopic = await _service.CreateTopic(topic);
 
                 SuccessResponse response = new()
                 {
@@ -37,7 +37,7 @@ namespace Talkish.API.Controllers
                     Status = 200,
                 };
                 
-                return Ok(response);
+                return CreatedAtAction(nameof(GetTopicById), new { Id = createdTopic.TopicId }, response);
             }
 
             List<string> errors = ModelState.Values.SelectMany(v => v.Errors.Select(t => t.ErrorMessage)).ToList();

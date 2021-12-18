@@ -29,7 +29,7 @@ namespace Talkish.API.Controllers
             if (ModelState.IsValid)
             {
                 Publication publication = _mapper.Map<Publication>(PublicationData);
-                await _service.CreatePublication(publication);
+                Publication createdPublication = await _service.CreatePublication(publication);
 
                 SuccessResponse response = new()
                 {
@@ -37,7 +37,7 @@ namespace Talkish.API.Controllers
                     Status = 201,
                 };
 
-                return CreatedAtAction(nameof(GetPublicationById), new { Id = publication.PublicationId }, publication);
+                return CreatedAtAction(nameof(GetPublicationById), new { Id = createdPublication.PublicationId }, publication);
             } else
             {
                 List<string> errors = ModelState.Values.SelectMany(v => v.Errors.Select(p => p.ErrorMessage)).ToList();
@@ -280,7 +280,7 @@ namespace Talkish.API.Controllers
                 Status = 200,
             };
             
-            return Ok(res);
+            return Ok(response);
         }
     }
 }

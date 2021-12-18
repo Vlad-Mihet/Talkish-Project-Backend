@@ -4,9 +4,6 @@ namespace Talkish.API.DTOs
 {
     public class UpdateAuthorDTO
     {
-        [Key]
-        public int AuthorId { get; set; }
-
         [Required]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }

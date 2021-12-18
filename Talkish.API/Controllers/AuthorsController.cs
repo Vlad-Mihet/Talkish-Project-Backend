@@ -29,7 +29,7 @@ namespace Talkish.API.Controllers
             if (ModelState.IsValid)
             {
                 Author author = _mapper.Map<Author>(AuthorData);
-                await _service.CreateAuthor(author);
+                Author createdAuthor = await _service.CreateAuthor(author);
 
 
                 SuccessResponse response = new()
@@ -38,7 +38,7 @@ namespace Talkish.API.Controllers
                     Status = 201
                 };
 
-                return CreatedAtAction(nameof(GetAuthorById), new { Id = author.AuthorId }, response);
+                return CreatedAtAction(nameof(GetAuthorById), new { Id = createdAuthor.AuthorId }, response);
             } else
             {
                 List<string> errors = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage)).ToList();

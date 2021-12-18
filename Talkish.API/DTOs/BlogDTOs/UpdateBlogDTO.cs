@@ -4,9 +4,6 @@ namespace Talkish.API.DTOs
 {
     public class UpdateBlogDTO
     {
-        [Key]
-        public int BlogId { get; set; }
-
         [Required]
         [Display(Name = "Blog Title")]
         [DataType(DataType.Text)]
