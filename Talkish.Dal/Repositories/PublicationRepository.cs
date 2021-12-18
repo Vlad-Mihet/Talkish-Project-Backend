@@ -51,21 +51,31 @@ namespace Talkish.Dal.Repositories
 
         public async Task<List<Author>> GetAllPublicationAuthorsAsync(int Id)
         {
-            List<Author> publicationAuthors = await _ctx.Publications
-                .Where((publication) => publication.PublicationId == Id)
+            Publication publication = await _ctx.Publications
                 .Include((publication) => publication.Authors)
-                .SelectMany((publication) => publication.Authors)
-                .ToListAsync();
+                .FirstOrDefaultAsync((publication) => publication.PublicationId == Id);
+
+            if (publication == null)
+            {
+                return null;
+            }
+
+            List<Author> publicationAuthors = publication.Authors.ToList();
             return publicationAuthors;
         }
 
         public async Task<List<Blog>> GetAllPublicationBlogsAsync(int Id)
         {
-            List<Blog> publicationBlogs = await _ctx.Publications
-                .Where((publication) => publication.PublicationId == Id)
+            Publication publication = await _ctx.Publications
                 .Include((publication) => publication.Blogs)
-                .SelectMany((publication) => publication.Blogs)
-                .ToListAsync();
+                .FirstOrDefaultAsync((publication) => publication.PublicationId == Id);
+
+            if (publication == null)
+            {
+                return null;
+            }
+
+            List<Blog> publicationBlogs = publication.Blogs.ToList();
             return publicationBlogs;
         }
 
@@ -74,6 +84,12 @@ namespace Talkish.Dal.Repositories
             Publication publicationToDelete = await _ctx.Publications
                 .Include((publication) => publication.Owner)
                 .FirstOrDefaultAsync((publication) => publication.PublicationId == Id);
+            
+            if (publicationToDelete == null)
+            {
+                return null;
+            }
+            
             _ctx.Publications.Remove(publicationToDelete);
             await _ctx.SaveChangesAsync();
             return publicationToDelete;
@@ -82,6 +98,12 @@ namespace Talkish.Dal.Repositories
         public async Task<Publication> UpdatePublicationAsync(int PublicationId, Publication PublicationData)
         {
             Publication publication = await _ctx.Publications.FirstOrDefaultAsync((publication) => publication.PublicationId == PublicationId);
+           
+            if (publication == null)
+            {
+                return null;
+            }
+            
             publication.Name = PublicationData.Name;
             _ctx.Publications.Update(publication);
             await _ctx.SaveChangesAsync();
@@ -95,6 +117,12 @@ namespace Talkish.Dal.Repositories
             Publication publication = await _ctx.Publications
                 .Include((publication) => publication.Blogs)
                 .FirstOrDefaultAsync((publication) => publication.PublicationId == PublicationId);
+
+            if (publication == null || blog == null)
+            {
+                return null;
+            }
+            
             publication.Blogs.Add(blog);
             await _ctx.SaveChangesAsync();
             return publication;
@@ -107,6 +135,12 @@ namespace Talkish.Dal.Repositories
             Publication publication = await _ctx.Publications
                 .Include((publication) => publication.Authors)
                 .FirstOrDefaultAsync((publication) => publication.PublicationId == PublicationId);
+            
+            if (publication == null || author == null)
+            {
+                return null;
+            }
+            
             publication.Authors.Add(author);
             await _ctx.SaveChangesAsync();
             return publication;

@@ -116,7 +116,7 @@ namespace Talkish.API.Controllers
                 ErrorResponse error = new()
                 {
                     ErrorMessage = "Invalid Blog Data",
-                    Errors = new List<string>(errors),
+                    Errors = errors,
                     Status = 400,
                 };
 
