@@ -25,7 +25,13 @@ namespace Talkish.Dal.Repositories
 
         public async Task<Blog> DeleteBlogByIdAsync(int Id)
         {
-            Blog blogToRemove = await _ctx.Blogs.FirstOrDefaultAsync((b) => b.AuthorId == Id);
+            Blog blogToRemove = await _ctx.Blogs.FirstOrDefaultAsync((b) => b.BlogId == Id);
+
+            if (blogToRemove == null)
+            {
+                return null;
+            }
+
             _ctx.Blogs.Remove(blogToRemove);
             await _ctx.SaveChangesAsync();
             return blogToRemove;
@@ -56,12 +62,24 @@ namespace Talkish.Dal.Repositories
             Blog blog = await _ctx.Blogs
                 .Include((blog) => blog.Topics)
                 .FirstOrDefaultAsync((blog) => blog.BlogId == Id);
+
+            if (blog == null)
+            {
+                return null;
+            }
+
             return blog.Topics;
         }
 
         public async Task<Blog> UpdateBlogAsync(int BlogId, Blog BlogData)
         {
             Blog blog = await _ctx.Blogs.FirstOrDefaultAsync((blog) => blog.BlogId == BlogId);
+
+            if (blog == null)
+            {
+                return null;
+            }
+
             blog.Title = BlogData.Title;
             blog.Content = BlogData.Content;
             _ctx.Blogs.Update(blog);
@@ -78,6 +96,11 @@ namespace Talkish.Dal.Repositories
             Topic topic = await _ctx.Topics
                 .Where((topic) => topic.TopicId == TopicId)
                 .FirstOrDefaultAsync();
+
+            if (blog == null || topic == null)
+            {
+                return null;
+            }
 
             blog.Topics.Add(topic);
             await _ctx.SaveChangesAsync();
