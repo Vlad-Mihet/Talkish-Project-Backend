@@ -24,6 +24,12 @@ namespace Talkish.Dal.Repositories
         public async Task<Topic> DeleteTopicByIdAsync(int Id)
         {
             Topic topicToDelete = await _ctx.Topics.FirstOrDefaultAsync(topic => topic.TopicId == Id);
+            
+            if (topicToDelete == null)
+            {
+                return null;
+            }
+            
             _ctx.Remove(topicToDelete);
             await _ctx.SaveChangesAsync();
             return topicToDelete;
@@ -46,6 +52,12 @@ namespace Talkish.Dal.Repositories
         public async Task<Topic> UpdateTopicAsync(int TopicId, Topic TopicData)
         {
             Topic topic = await _ctx.Topics.FirstOrDefaultAsync((topic) => topic.TopicId == TopicId);
+            
+            if (topic == null)
+            {
+                return null;
+            }
+            
             topic.Name = TopicData.Name;
             _ctx.Topics.Update(topic);
             await _ctx.SaveChangesAsync();

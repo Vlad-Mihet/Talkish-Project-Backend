@@ -280,7 +280,7 @@ namespace Talkish.API.Controllers
                 Status = 200,
             };
             
-            return Ok(response);
+            return Ok(res);
         }
     }
 }
