@@ -26,6 +26,12 @@ namespace Talkish.Dal.Repositories
         public async Task<Author> DeleteAuthorByIdAsync(int id)
         {
             Author authorToRemove = await _ctx.Authors.FirstOrDefaultAsync((a) => a.AuthorId == id);
+            
+            if (authorToRemove == null)
+            {
+                return null;
+            }
+            
             _ctx.Authors.Remove(authorToRemove);
             await _ctx.SaveChangesAsync();
             return authorToRemove;
@@ -37,6 +43,12 @@ namespace Talkish.Dal.Repositories
                 .Include((author) => author.Blogs)
                 .ThenInclude((blog) => blog.Topics)
                 .FirstOrDefaultAsync((author) => author.AuthorId == id);
+
+            if (author == null)
+            {
+                return null;
+            }
+
             List<Blog> blogs = author.Blogs
                 .ToList();
             return blogs;
@@ -62,6 +74,12 @@ namespace Talkish.Dal.Repositories
         public async Task<Author> UpdateAuthorAsync(int AuthorId, Author AuthorData)
         {
             Author author = await _ctx.Authors.FirstOrDefaultAsync((author) => author.AuthorId == AuthorId);
+            
+            if (author == null)
+            {
+                return null;
+            }
+
             author.FirstName = AuthorData.FirstName;
             author.LastName = AuthorData.LastName;
             author.Email = AuthorData.Email;

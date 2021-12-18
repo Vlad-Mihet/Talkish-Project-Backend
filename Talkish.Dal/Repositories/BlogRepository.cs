@@ -74,14 +74,14 @@ namespace Talkish.Dal.Repositories
         public async Task<Blog> UpdateBlogAsync(int BlogId, Blog BlogData)
         {
             Blog blog = await _ctx.Blogs.FirstOrDefaultAsync((blog) => blog.BlogId == BlogId);
-            blog.Title = BlogData.Title;
-            blog.Content = BlogData.Content;
 
             if (blog == null)
             {
                 return null;
             }
 
+            blog.Title = BlogData.Title;
+            blog.Content = BlogData.Content;
             _ctx.Blogs.Update(blog);
             await _ctx.SaveChangesAsync();
             return blog;

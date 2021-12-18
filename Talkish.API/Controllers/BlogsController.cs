@@ -108,7 +108,7 @@ namespace Talkish.API.Controllers
                     Status = 201
                 };
 
-                return CreatedAtAction(nameof(GetBlogById), response);
+                return CreatedAtAction(nameof(GetBlogById), new { Id = blog.BlogId }, response);
             } else
             {
                 List<string> errors = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage)).ToList();
@@ -128,28 +128,32 @@ namespace Talkish.API.Controllers
         [HttpPatch]
         public async Task<IActionResult> UpdateBlog([FromRoute] int BlogId, [FromBody] UpdateBlogDTO BlogData)
         {
-            Blog blog = _mapper.Map<Blog>(BlogData);
-            await _service.UpdateBlog(BlogId, blog);
-
-            if (blog == null)
+            if (ModelState.IsValid)
             {
+                Blog blog = _mapper.Map<Blog>(BlogData);
+                await _service.UpdateBlog(BlogId, blog);
+
+
+                SuccessResponse response = new()
+                {
+                    Payload = BlogData,
+                    Status = 200
+                };
+
+                return Ok(response);
+            } else 
+            {
+                List<string> errors = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage)).ToList();
+
                 ErrorResponse error = new()
                 {
-                    ErrorMessage = "Couldn't update blog, please try again later",
-                    Errors = new List<string>(),
+                    ErrorMessage = "Invalid Blog Data",
+                    Errors = new List<string>(errors),
                     Status = 400,
                 };
 
                 return BadRequest(error);
             }
-
-            SuccessResponse response = new()
-            {
-                Payload = BlogData,
-                Status = 200
-            };
-
-            return Ok(response);
         }
 
         [Route("{BlogId}/topics/{TopicId}")]
