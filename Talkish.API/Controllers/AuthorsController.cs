@@ -59,7 +59,14 @@ namespace Talkish.API.Controllers
         {
             List<Author> authors = await _service.GetAllAuthors();
             List<AuthorWithBlogsDTO> authorDTOs = _mapper.Map<List<AuthorWithBlogsDTO>>(authors);
-            return Ok(authorDTOs);
+
+            SuccessResponse response = new()
+            {
+                Payload = authorDTOs,
+                Status = 200,
+            };
+            
+            return Ok(response);
         }
 
         [Route("{Id}")]

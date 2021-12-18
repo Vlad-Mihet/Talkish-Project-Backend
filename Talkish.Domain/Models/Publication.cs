@@ -19,6 +19,7 @@ namespace Talkish.Domain.Models
         
         // The owner will be a user identity
         // in the future
+        // The owner created a relationship in our db
         public Author Owner { get; set; }
 
         public List<Author> Authors { get; set; }

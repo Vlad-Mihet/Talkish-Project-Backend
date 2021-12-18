@@ -57,7 +57,14 @@ namespace Talkish.API.Controllers
         {
             List<Topic> topics = await _service.GetAllTopics();
             List<TopicDTO> topicDTOs = _mapper.Map<List<TopicDTO>>(topics);
-            return Ok(topicDTOs);
+
+            SuccessResponse response = new()
+            {
+                Payload = topicDTOs,
+                Status = 200,
+            };
+
+            return Ok(response);
         }
 
         [Route("{Id}")]
