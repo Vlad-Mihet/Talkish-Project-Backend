@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Talkish.Domain.Models
@@ -19,6 +20,13 @@ namespace Talkish.Domain.Models
         [Display(Name = "Blog Content")]
         [StringLength(100000, MinimumLength = 30, ErrorMessage = "Blog content must be longer than 30 characters")]
         public string Content { get; set; }
+
+        [Display(Name = "Draft Story")]
+        public bool IsDraft { get; set; } = true;
+
+        [DataType(DataType.DateTime)]
+        [Display(Name = "Published At")]
+        public DateTime PublishedAt { get; set; }
 
         public int AuthorId { get; set; }
 

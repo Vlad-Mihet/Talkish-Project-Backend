@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Talkish.Domain.Models
@@ -21,6 +22,13 @@ namespace Talkish.Domain.Models
         [DataType(DataType.EmailAddress)]
         [EmailAddress]
         public string Email { get; set; }
+
+        [Display(Name = "Bio")]
+        public string Bio { get; set; }
+
+        [DataType(DataType.DateTime)]
+        [Display(Name = "Account Created At")]
+        public DateTime CreatedAt { get; set; }
 
         public List<Blog> Blogs { get; set; }
     }
