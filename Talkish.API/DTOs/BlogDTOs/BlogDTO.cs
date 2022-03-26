@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Talkish.API.DTOs
 {
@@ -9,6 +10,8 @@ namespace Talkish.API.DTOs
         public string Title { get; set; }
 
         public string Content { get; set; }
+
+        public DateTime PublishedAt { get; set; }
 
         public int ReadingTime { get; set; }
 

@@ -14,6 +14,11 @@ namespace Talkish.Domain.Models
         [Display(Name = "Publication Name")]
         public string Name { get; set; }
 
+        [Required]
+        [StringLength(200, MinimumLength = 20, ErrorMessage = "Publication's description must be longer than 20 characters, but shorter than 200")]
+        [Display(Name = "Publication Description")]
+        public string Description { get; set; }
+
         [ForeignKey("Author")]
         public int OwnerId { get; set; }
         
