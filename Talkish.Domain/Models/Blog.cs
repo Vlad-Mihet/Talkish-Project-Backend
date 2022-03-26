@@ -22,11 +22,11 @@ namespace Talkish.Domain.Models
         public string Content { get; set; }
 
         [Display(Name = "Draft Story")]
-        public bool IsDraft { get; set; } = true;
+        public bool IsDraft { get; set; }
 
         [DataType(DataType.DateTime)]
         [Display(Name = "Published At")]
-        public DateTime PublishedAt { get; set; }
+        public DateTime PublishedAt { get; set; } = DateTime.Now;
 
         public int AuthorId { get; set; }
 
