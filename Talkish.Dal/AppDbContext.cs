@@ -33,6 +33,15 @@ namespace Talkish.Dal
             builder.Entity<Publication>()
                 .HasIndex((publication) => publication.Name)
                 .IsUnique();
+
+            builder.Entity<Author>()
+                .HasOne((author) => author.UserProfile)
+                .WithOne((userProfile) => userProfile.AuthorProfile)
+                .HasForeignKey<User>((user) => user.UserId);
+
+            builder.Entity<User>()
+                .HasMany((user) => user.Followers)
+                .WithMany((follower) => follower.Following);
         }
     }
 }

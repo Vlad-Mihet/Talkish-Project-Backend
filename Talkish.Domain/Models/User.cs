@@ -28,5 +28,8 @@ namespace Talkish.Domain.Models
         [Display(Name = "Users that this user is following")]
         public List<User> Following { get; set; }
 
+        [Display(Name = "Users that are following this user")]
+        public List<User> Followers { get; set; }
+
     }
 }
