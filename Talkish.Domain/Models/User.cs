@@ -8,20 +8,6 @@ namespace Talkish.Domain.Models
         [Key]
         public int UserId { get; set; }
 
-        [Required]
-        [Display(Name = "First Name")]
-        public string FirstName { get; set; }
-
-        [Required]
-        [Display(Name = "Last Name")]
-        public string LastName { get; set; }
-
-        [Required]
-        [Display(Name = "Email")]
-        [DataType(DataType.EmailAddress)]
-        [EmailAddress]
-        public string Email { get; set; }
-
         [Display(Name = "User's Author Profile")]
         public Author AuthorProfile { get; set; }
 
@@ -30,6 +16,5 @@ namespace Talkish.Domain.Models
 
         [Display(Name = "Users that are following this user")]
         public List<User> Followers { get; set; }
-
     }
 }

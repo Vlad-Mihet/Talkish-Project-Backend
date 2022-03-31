@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Talkish.Dal;
 
 namespace Talkish.Dal.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220326172033_UpdateUserFieldToUserProfileForAuthorModel")]
+    partial class UpdateUserFieldToUserProfileForAuthorModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,26 +34,6 @@ namespace Talkish.Dal.Migrations
                     b.HasIndex("TopicsTopicId");
 
                     b.ToTable("BlogTopic");
-                });
-
-            modelBuilder.Entity("Talkish.Domain.Models.AuthUser", b =>
-                {
-                    b.Property<int>("IdentityId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("IdentityId");
-
-                    b.ToTable("AuthUsers");
                 });
 
             modelBuilder.Entity("Talkish.Domain.Models.Author", b =>
@@ -81,26 +63,6 @@ namespace Talkish.Dal.Migrations
                     b.HasIndex("PublicationId");
 
                     b.ToTable("Authors");
-                });
-
-            modelBuilder.Entity("Talkish.Domain.Models.BasicInfo", b =>
-                {
-                    b.Property<int>("BasicInfoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("BasicInfoId");
-
-                    b.ToTable("BasicInfo");
                 });
 
             modelBuilder.Entity("Talkish.Domain.Models.Blog", b =>
@@ -186,6 +148,18 @@ namespace Talkish.Dal.Migrations
                 {
                     b.Property<int>("UserId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId");
 
