@@ -14,8 +14,6 @@ namespace Talkish.Domain.Interfaces
 
         Task<List<Blog>> GetAuthorBlogsByAuthorIdAsync(int Id);
 
-        Task<Author> UpdateAuthorAsync(int AuthorId, Author Author);
-
         Task<List<Author>> GetAllAuthorsAsync();
     }
 }

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Talkish.API.DTOs;
 using Talkish.API.Responses;
 using Talkish.Domain.Interfaces;
 using Talkish.Domain.Models;
@@ -24,12 +23,12 @@ namespace Talkish.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] AuthRegisterDTO RegistrationData)
+        [Route("registration")]
+        public async Task<IActionResult> Register([FromBody] dynamic RegistrationData)
         {
             if (ModelState.IsValid)
             {
-                AuthUser user = _mapper.Map<AuthUser>(RegistrationData);
-                AuthUser createdUser = await _service.Register(user);
+                User createdUser = await _service.Register(RegistrationData);
 
                 SuccessResponse response = new()
                 {
@@ -55,13 +54,12 @@ namespace Talkish.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] AuthLoginDTO LoginData)
+        [Route("login")]
+        public async Task<IActionResult> Login([FromBody] dynamic LoginData)
         {
             if (ModelState.IsValid)
             {
-                AuthUser user = _mapper.Map<AuthUser>(LoginData);
-
-                AuthUser loggedUser = await _service.Login(user);
+                User loggedUser = await _service.Login(LoginData);
 
                 if (loggedUser == null)
                 {

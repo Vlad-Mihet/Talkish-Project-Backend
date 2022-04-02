@@ -18,9 +18,10 @@ namespace Talkish.Dal.Repositories
         {
             _ctx = ctx;
             _userManager = userManager;
+            _mapper = mapper;
         }
 
-        public async Task<AuthUser> Login(AuthUser LoginData)
+        public async Task<User> Login(dynamic LoginData)
         {
             try
             {
@@ -39,7 +40,7 @@ namespace Talkish.Dal.Repositories
             }
         }
 
-        public async Task<AuthUser> Register(AuthUser RegistrationData)
+        public async Task<User> Register(dynamic RegistrationData)
         {
             try
             {
@@ -54,16 +55,16 @@ namespace Talkish.Dal.Repositories
 
                 var identity = await CreateIdentityUserAsync(RegistrationData, transaction);
 
-                return null;
+                var user = await CreateUserAsync(RegistrationData, transaction, identity);
 
-                // var createdUser = await 
+                return user;
             } catch (Exception)
             {
                 return null;
             }
         }
 
-        private async Task<IdentityUser> ValidateAndGetIdentityAsync(AuthUser LoginData)
+        private async Task<IdentityUser> ValidateAndGetIdentityAsync(dynamic LoginData)
         {
             var identityUser = await _userManager.FindByEmailAsync(LoginData.Email);
 
@@ -78,7 +79,7 @@ namespace Talkish.Dal.Repositories
             return identityUser;
         }
 
-        private async Task<IdentityUser> ValidateIdentityDoesNotExist(AuthUser RegistrationData)
+        private async Task<IdentityUser> ValidateIdentityDoesNotExist(dynamic RegistrationData)
         {
             var existingIdentity = await _userManager.FindByEmailAsync(RegistrationData.Email);
 
@@ -88,7 +89,7 @@ namespace Talkish.Dal.Repositories
             return existingIdentity;
         }
 
-        private async Task<IdentityUser> CreateIdentityUserAsync(AuthUser RegistrationData,
+        private async Task<IdentityUser> CreateIdentityUserAsync(dynamic RegistrationData,
         IDbContextTransaction transaction)
         {
             IdentityUser identity = new () {
@@ -106,6 +107,38 @@ namespace Talkish.Dal.Repositories
             return identity;
         }
 
-        
+        private async Task<User> CreateUserAsync(BasicInfo RegistrationData,
+        IDbContextTransaction transaction, IdentityUser identity)
+        {
+            try
+            {
+                BasicInfo basicInfo = new()
+                {
+                    Email = RegistrationData.Email,
+                    FirstName = RegistrationData.FirstName,
+                    LastName = RegistrationData.LastName,
+                };
+
+                _ctx.BasicInfo.Add(basicInfo);
+
+                await _ctx.SaveChangesAsync();
+
+                User user = new() {
+                    IdentityId = identity.Id,
+                    BasicInfo = basicInfo,
+                };
+
+                _ctx.Users.Add(user);
+
+                await _ctx.SaveChangesAsync();
+
+                return user;
+            }
+            catch (Exception e)
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
     }
 }

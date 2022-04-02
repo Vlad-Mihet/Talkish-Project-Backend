@@ -125,39 +125,6 @@ namespace Talkish.API.Controllers
             return StatusCode(200, response);
         }
 
-        [HttpPatch]
-        [Route("{AuthorId}")]
-        public async Task<IActionResult> UpdateAuthor([FromRoute] int AuthorId, [FromBody] UpdateAuthorDTO AuthorData)
-        {
-            if (ModelState.IsValid)
-            {
-                Author author = _mapper.Map<Author>(AuthorData);
-                await _service.UpdateAuthor(AuthorId, author);
-
-
-                SuccessResponse response = new()
-                {
-                    Payload = AuthorData,
-                    Status = 200
-                };
-
-                return Ok(response);
-            }
-            else
-            {
-                List<string> errors = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage)).ToList();
-
-                ErrorResponse error = new()
-                {
-                    ErrorMessage = "Invalid Author Data",
-                    Errors = new List<string>(errors),
-                    Status = 400,
-                };
-
-                return BadRequest(error);
-            }
-        }
-
         [Route("{Id}")]
         [HttpDelete]
         public async Task<IActionResult> DeleteAuthor([FromRoute] int Id)

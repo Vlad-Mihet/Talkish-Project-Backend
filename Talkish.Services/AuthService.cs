@@ -13,15 +13,15 @@ namespace Talkish.Services
             _repo = repo;
         }
 
-        public async Task<AuthUser> Login(AuthUser LoginData)
+        public async Task<User> Login(dynamic LoginData)
         {
-            AuthUser user = await _repo.Login(LoginData);
+            User user = await _repo.Login(LoginData);
             return user;
         }
 
-        public async Task<AuthUser> Register(AuthUser RegistrationData)
+        public async Task<User> Register(dynamic RegistrationData)
         {
-            AuthUser registeredUser = await _repo.Register(RegistrationData);
+            User registeredUser = await _repo.Register(RegistrationData);
             return registeredUser;
         }
     }

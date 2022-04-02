@@ -16,5 +16,9 @@ namespace Talkish.Domain.Models
 
         [Display(Name = "Users that are following this user")]
         public List<User> Followers { get; set; }
+
+        public string IdentityId { get; set; }
+
+        public BasicInfo BasicInfo { get; set; }
     }
 }

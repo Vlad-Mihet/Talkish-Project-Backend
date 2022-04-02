@@ -17,8 +17,6 @@ namespace Talkish.Dal
 
         public DbSet<Publication> Publications { get; set; }
 
-        public DbSet<AuthUser> AuthUsers { get; set; }
-
         public DbSet<User> Users { get; set; }
 
         public DbSet<BasicInfo> BasicInfo { get; set; }

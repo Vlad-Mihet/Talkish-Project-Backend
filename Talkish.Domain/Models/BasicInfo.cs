@@ -9,6 +9,12 @@ namespace Talkish.Domain.Models
         public int BasicInfoId { get; set; }
 
         [Required]
+        [Display(Name = "Email")]
+        [DataType(DataType.EmailAddress)]
+        [EmailAddress]
+        public string Email { get; set; }
+
+        [Required]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
 

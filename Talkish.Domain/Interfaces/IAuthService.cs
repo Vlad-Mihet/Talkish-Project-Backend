@@ -5,8 +5,8 @@ namespace Talkish.Domain.Interfaces
 {
     public interface IAuthService
     {
-        Task<AuthUser> Register(AuthUser RegistrationData);
+        Task<User> Register(dynamic RegistrationData);
 
-        Task<AuthUser> Login(AuthUser LoginData);
+        Task<User> Login(dynamic LoginData);
     }
 }
