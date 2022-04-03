@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 using Talkish.Domain.Interfaces;
 using Talkish.Domain.Models;
 
 namespace Talkish.Services
 {
-    class AuthService : IAuthService
+    public class AuthService : IAuthService
     {
         private readonly IAuthRepository _repo;
 
@@ -13,10 +14,10 @@ namespace Talkish.Services
             _repo = repo;
         }
 
-        public async Task<User> Login(dynamic LoginData)
+        public async Task<IdentityUser> Login(dynamic LoginData)
         {
-            User user = await _repo.Login(LoginData);
-            return user;
+            var success = await _repo.Login(LoginData);
+            return success;
         }
 
         public async Task<User> Register(dynamic RegistrationData)

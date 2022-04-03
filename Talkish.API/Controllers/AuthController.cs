@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Talkish.API.DTOs;
 using Talkish.API.Responses;
 using Talkish.Domain.Interfaces;
 using Talkish.Domain.Models;
@@ -24,11 +27,23 @@ namespace Talkish.API.Controllers
 
         [HttpPost]
         [Route("registration")]
-        public async Task<IActionResult> Register([FromBody] dynamic RegistrationData)
+        public async Task<IActionResult> Register([FromBody] AuthRegisterDTO RegistrationData)
         {
             if (ModelState.IsValid)
             {
                 User createdUser = await _service.Register(RegistrationData);
+
+                if (createdUser == null)
+                {
+                    ErrorResponse error = new()
+                    {
+                        ErrorMessage = "Invalid User Registration Data",
+                        Errors = new List<string>(),
+                        Status = 400,
+                    };
+
+                    return BadRequest(error);
+                }
 
                 SuccessResponse response = new()
                 {
@@ -55,13 +70,13 @@ namespace Talkish.API.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] dynamic LoginData)
+        public async Task<IActionResult> Login([FromBody] AuthLoginDTO LoginData)
         {
             if (ModelState.IsValid)
             {
-                User loggedUser = await _service.Login(LoginData);
+                IdentityUser loggedUser = await _service.Login(LoginData);
 
-                if (loggedUser == null)
+                if (loggedUser is null)
                 {
                     ErrorResponse error = new()
                     {

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Talkish.Dal;
 
 namespace Talkish.Dal.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220403193140_RemoveUserOwnBasicInfoRelationship")]
+    partial class RemoveUserOwnBasicInfoRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -247,9 +249,6 @@ namespace Talkish.Dal.Migrations
 
                     b.HasIndex("PublicationId");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
                     b.ToTable("Authors");
                 });
 
@@ -397,6 +396,9 @@ namespace Talkish.Dal.Migrations
 
                     b.HasKey("UserId");
 
+                    b.HasIndex("AuthorId")
+                        .IsUnique();
+
                     b.HasIndex("BasicInfoId");
 
                     b.ToTable("Users");
@@ -473,14 +475,6 @@ namespace Talkish.Dal.Migrations
                     b.HasOne("Talkish.Domain.Models.Publication", null)
                         .WithMany("Authors")
                         .HasForeignKey("PublicationId");
-
-                    b.HasOne("Talkish.Domain.Models.User", "UserProfile")
-                        .WithOne("AuthorProfile")
-                        .HasForeignKey("Talkish.Domain.Models.Author", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UserProfile");
                 });
 
             modelBuilder.Entity("Talkish.Domain.Models.Blog", b =>
@@ -518,9 +512,18 @@ namespace Talkish.Dal.Migrations
 
             modelBuilder.Entity("Talkish.Domain.Models.User", b =>
                 {
+                    b.HasOne("Talkish.Domain.Models.Author", "AuthorProfile")
+                        .WithOne("UserProfile")
+                        .HasForeignKey("Talkish.Domain.Models.User", "AuthorId")
+                        .HasPrincipalKey("Talkish.Domain.Models.Author", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Talkish.Domain.Models.BasicInfo", "BasicInfo")
                         .WithMany()
                         .HasForeignKey("BasicInfoId");
+
+                    b.Navigation("AuthorProfile");
 
                     b.Navigation("BasicInfo");
                 });
@@ -528,6 +531,8 @@ namespace Talkish.Dal.Migrations
             modelBuilder.Entity("Talkish.Domain.Models.Author", b =>
                 {
                     b.Navigation("Blogs");
+
+                    b.Navigation("UserProfile");
                 });
 
             modelBuilder.Entity("Talkish.Domain.Models.Publication", b =>
@@ -539,8 +544,6 @@ namespace Talkish.Dal.Migrations
 
             modelBuilder.Entity("Talkish.Domain.Models.User", b =>
                 {
-                    b.Navigation("AuthorProfile");
-
                     b.Navigation("Followers");
                 });
 #pragma warning restore 612, 618

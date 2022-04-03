@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 using Talkish.Domain.Models;
 
 namespace Talkish.Domain.Interfaces
@@ -7,6 +8,6 @@ namespace Talkish.Domain.Interfaces
     {
         Task<User> Register(dynamic RegistrationData);
 
-        Task<User> Login(dynamic LoginData);
+        Task<IdentityUser> Login(dynamic LoginData);
     }
 }

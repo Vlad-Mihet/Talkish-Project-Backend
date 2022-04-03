@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 using Talkish.Domain.Interfaces;
@@ -8,34 +10,37 @@ using Talkish.Domain.Models;
 
 namespace Talkish.Dal.Repositories
 {
-    class AuthRepository : IAuthRepository
+    public class AuthRepository : IAuthRepository
     {
         private readonly AppDbContext _ctx;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IMapper _mapper;
+        private readonly ILogger _logger;
 
-        public AuthRepository(AppDbContext ctx, UserManager<IdentityUser> userManager, IMapper mapper)
+        public AuthRepository(AppDbContext ctx, UserManager<IdentityUser> userManager, IMapper mapper, ILogger<AuthRepository> logger)
         {
             _ctx = ctx;
             _userManager = userManager;
             _mapper = mapper;
+            _logger = logger;
         }
 
-        public async Task<User> Login(dynamic LoginData)
+        public async Task<IdentityUser> Login(dynamic LoginData)
         {
             try
             {
-                var identityUser = await ValidateAndGetIdentityAsync(LoginData);
+                IdentityUser identityUser = await ValidateAndGetIdentityAsync(LoginData);
 
                 if (identityUser is null)
                 {
-                    throw new Exception("User couldn't be found");
+                    return null;
                 }
 
-                return LoginData;
+                return identityUser;
 
-            } catch (Exception)
+            } catch (Exception e)
             {
+                _logger.LogDebug(JsonConvert.SerializeObject(e));
                 return null;
             }
         }
@@ -46,7 +51,7 @@ namespace Talkish.Dal.Repositories
             {
                 var existingIdentity = await ValidateIdentityDoesNotExist(RegistrationData);
 
-                if (existingIdentity is not null)
+                if (existingIdentity != null)
                 {
                     return null;
                 }
@@ -57,9 +62,17 @@ namespace Talkish.Dal.Repositories
 
                 var user = await CreateUserAsync(RegistrationData, transaction, identity);
 
+                if (identity is null || user is null)
+                {
+                    return null;
+                }
+
+                await transaction.CommitAsync();
+
                 return user;
-            } catch (Exception)
+            } catch (Exception ex)
             {
+                _logger.LogInformation(JsonConvert.SerializeObject(ex));
                 return null;
             }
         }
@@ -89,14 +102,15 @@ namespace Talkish.Dal.Repositories
             return existingIdentity;
         }
 
-        private async Task<IdentityUser> CreateIdentityUserAsync(dynamic RegistrationData,
+        public async Task<IdentityUser> CreateIdentityUserAsync(dynamic RegistrationData,
         IDbContextTransaction transaction)
         {
             IdentityUser identity = new () {
-                Email = RegistrationData.Email
+                Email = RegistrationData.Email,
+                UserName = RegistrationData.Email
             };
 
-            var createdIdentity = await _userManager.CreateAsync(identity, RegistrationData.Password);
+            IdentityResult createdIdentity = await _userManager.CreateAsync(identity, RegistrationData.Password);
 
             if (!createdIdentity.Succeeded)
             {
@@ -104,10 +118,11 @@ namespace Talkish.Dal.Repositories
 
                 return null;
             }
+
             return identity;
         }
 
-        private async Task<User> CreateUserAsync(BasicInfo RegistrationData,
+        private async Task<User> CreateUserAsync(dynamic RegistrationData,
         IDbContextTransaction transaction, IdentityUser identity)
         {
             try
@@ -121,8 +136,6 @@ namespace Talkish.Dal.Repositories
 
                 _ctx.BasicInfo.Add(basicInfo);
 
-                await _ctx.SaveChangesAsync();
-
                 User user = new() {
                     IdentityId = identity.Id,
                     BasicInfo = basicInfo,
@@ -134,10 +147,11 @@ namespace Talkish.Dal.Repositories
 
                 return user;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
+                _logger.LogInformation(JsonConvert.SerializeObject(ex));
                 await transaction.RollbackAsync();
-                throw;
+                return null;
             }
         }
     }

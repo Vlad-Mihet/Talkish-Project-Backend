@@ -11,5 +11,7 @@ namespace Talkish.Domain.Models
         public List<Blog> Blogs { get; set; }
 
         public User UserProfile { get; set; }
+
+        public int UserId { get; set; }
     }
 }

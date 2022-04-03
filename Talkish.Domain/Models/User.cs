@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Talkish.Domain.Models
 {
@@ -11,11 +12,10 @@ namespace Talkish.Domain.Models
         [Display(Name = "User's Author Profile")]
         public Author AuthorProfile { get; set; }
 
-        [Display(Name = "Users that this user is following")]
-        public List<User> Following { get; set; }
+        public int AuthorId { get; set; }
 
         [Display(Name = "Users that are following this user")]
-        public List<User> Followers { get; set; }
+        public List<Follower> Followers { get; set; }
 
         public string IdentityId { get; set; }
 
