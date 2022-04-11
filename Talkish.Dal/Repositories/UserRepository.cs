@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -10,10 +12,12 @@ namespace Talkish.Dal.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly AppDbContext _ctx;
+        private readonly ILogger _logger;
 
-        public UserRepository(AppDbContext ctx)
+        public UserRepository(AppDbContext ctx, ILogger<UserRepository> logger)
         {
             _ctx = ctx;
+            _logger = logger;
         }
 
         public async Task<bool?> FollowAsync(int FollowingId, int FollowedUserId)
@@ -64,27 +68,37 @@ namespace Talkish.Dal.Repositories
 
         public async Task<List<User>> GetAllUsersAsync()
         {
-            List<User> users = await _ctx.Users.ToListAsync();
+            List<User> users = await _ctx.Users
+                .Include((user) => user.BasicInfo)
+                .ToListAsync();
 
             return users;
         }
 
         public async Task<User> GetUserByIdAsync(int Id)
         {
-            User user = await _ctx.Users.FirstOrDefaultAsync((user) => user.UserId == Id);
+            User user = await _ctx.Users
+                .Include((user) => user.BasicInfo)
+                .FirstOrDefaultAsync((user) => user.UserId == Id);
 
             return user;
         }
 
         public async Task<List<User>> GetUserFollowersByUserIdAsync(int Id)
         {
-            User user = await _ctx.Users.FirstOrDefaultAsync((user) => user.UserId == Id);
+            User user = await _ctx.Users
+                .Include((user) => user.BasicInfo)
+                .Include((user) => user.Followers)
+                .FirstOrDefaultAsync((user) => user.UserId == Id);
 
             return user.Followers;
         }
 
         public async Task<List<User>> GetUserFollowedUsersByUserIdAsync(int Id) {
-            User user = await _ctx.Users.FirstOrDefaultAsync((user) => user.UserId == Id);
+            User user = await _ctx.Users
+                .Include((user) => user.BasicInfo)
+                .Include((user) => user.Following)
+                .FirstOrDefaultAsync((user) => user.UserId == Id);
 
             return user.Following;
         }

@@ -47,6 +47,8 @@ namespace Talkish.Dal.Repositories
 
         public async Task<User> Register(dynamic RegistrationData)
         {
+            await using var transaction = await _ctx.Database.BeginTransactionAsync();
+
             try
             {
                 var existingIdentity = await ValidateIdentityDoesNotExist(RegistrationData);
@@ -56,11 +58,9 @@ namespace Talkish.Dal.Repositories
                     return null;
                 }
 
-                await using var transaction = await _ctx.Database.BeginTransactionAsync();
+                var identity = await CreateIdentityUserAsync(RegistrationData);
 
-                var identity = await CreateIdentityUserAsync(RegistrationData, transaction);
-
-                var user = await CreateUserAsync(RegistrationData, transaction, identity);
+                var user = await CreateUserAsync(RegistrationData, identity);
 
                 if (identity is null || user is null)
                 {
@@ -73,6 +73,7 @@ namespace Talkish.Dal.Repositories
             } catch (Exception ex)
             {
                 _logger.LogInformation(JsonConvert.SerializeObject(ex));
+                await transaction.RollbackAsync();
                 return null;
             }
         }
@@ -102,8 +103,7 @@ namespace Talkish.Dal.Repositories
             return existingIdentity;
         }
 
-        public async Task<IdentityUser> CreateIdentityUserAsync(dynamic RegistrationData,
-        IDbContextTransaction transaction)
+        public async Task<IdentityUser> CreateIdentityUserAsync(dynamic RegistrationData)
         {
             IdentityUser identity = new () {
                 Email = RegistrationData.Email,
@@ -114,16 +114,13 @@ namespace Talkish.Dal.Repositories
 
             if (!createdIdentity.Succeeded)
             {
-                await transaction.RollbackAsync();
-
-                return null;
+                throw new Exception(createdIdentity.Errors.ToString());
             }
 
             return identity;
         }
 
-        private async Task<User> CreateUserAsync(dynamic RegistrationData,
-        IDbContextTransaction transaction, IdentityUser identity)
+        private async Task<User> CreateUserAsync(dynamic RegistrationData, IdentityUser identity)
         {
             try
             {
@@ -136,6 +133,8 @@ namespace Talkish.Dal.Repositories
 
                 _ctx.BasicInfo.Add(basicInfo);
 
+                await _ctx.SaveChangesAsync();
+
                 User user = new() {
                     IdentityId = identity.Id,
                     BasicInfo = basicInfo,
@@ -147,11 +146,9 @@ namespace Talkish.Dal.Repositories
 
                 return user;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _logger.LogInformation(JsonConvert.SerializeObject(ex));
-                await transaction.RollbackAsync();
-                return null;
+                throw;
             }
         }
     }
