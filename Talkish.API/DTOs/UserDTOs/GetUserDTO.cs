@@ -1,4 +1,4 @@
-﻿namespace Talkish.API.DTOs;
+﻿namespace Talkish.API.DTOs
 {
     public class GetUserDTO
     {
