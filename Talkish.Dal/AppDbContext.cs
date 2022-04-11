@@ -52,6 +52,10 @@ namespace Talkish.Dal
                 .WithOne((user) => user.AuthorProfile)
                 .HasForeignKey<Author>((author) => author.UserId);
 
+            builder.Entity<User>()
+                .HasMany((follower) => follower.Following)
+                .WithMany((following) => following.Followers);
+
         }
     }
 }

@@ -91,6 +91,8 @@ namespace Talkish.API
             services.AddScoped<IPublicationService, PublicationService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserService, UserService>();
             services.AddAutoMapper(typeof(Startup));
 
             // Suppress Automatic Validation Bad Request Response
