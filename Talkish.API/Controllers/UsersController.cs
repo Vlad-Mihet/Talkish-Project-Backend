@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Talkish.API.DTOs;
 using Talkish.API.Responses;
 using Talkish.Domain.Interfaces;
 using Talkish.Domain.Models;
@@ -47,9 +48,11 @@ namespace Talkish.API.Controllers
         {
             List<User> users = await _service.GetAllUsersAsync();
 
+            List<GetUserDTO> mappedUsers = _mapper.Map<List<GetUserDTO>>(users);
+
             SuccessResponse response = new()
             {
-                Payload = users,
+                Payload = mappedUsers,
                 Status = 200,
             };
 
@@ -61,6 +64,8 @@ namespace Talkish.API.Controllers
         public async Task<IActionResult> GetUserById([FromRoute] int Id)
         {
             User user = await _service.GetUserByIdAsync(Id);
+
+            GetUserDTO mappedUser = _mapper.Map<GetUserDTO>(user);
 
             if (user == null)
             {
@@ -76,7 +81,7 @@ namespace Talkish.API.Controllers
 
             SuccessResponse response = new()
             {
-                Payload = user,
+                Payload = mappedUser,
                 Status = 200
             };
 
@@ -89,9 +94,11 @@ namespace Talkish.API.Controllers
         {
             List<User> userFollowers = await _service.GetUserFollowersByUserIdAsync(Id);
 
+            List<FollowerDTO> mappedUserFollowers = _mapper.Map<List<FollowerDTO>>(userFollowers);
+
             SuccessResponse response = new()
             {
-                Payload = userFollowers,
+                Payload = mappedUserFollowers,
                 Status = 200
             };
 
@@ -104,9 +111,11 @@ namespace Talkish.API.Controllers
         {
             List<User> userFollowing = await _service.GetUserFollowedUsersByUserIdAsync(Id);
 
+            List<FollowerDTO> mappedUserFollowing = _mapper.Map<List<FollowerDTO>>(userFollowing);
+
             SuccessResponse response = new()
             {
-                Payload = userFollowing,
+                Payload = mappedUserFollowing,
                 Status = 200
             };
 
