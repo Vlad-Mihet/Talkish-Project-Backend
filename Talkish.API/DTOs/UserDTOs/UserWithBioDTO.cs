@@ -1,4 +1,4 @@
-﻿namespace Talkish.API.DTOs.UserDTOs
+﻿namespace Talkish.API.DTOs;
 {
     public class UserWithBioDTO
     {
