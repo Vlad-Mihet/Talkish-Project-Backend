@@ -31,7 +31,7 @@ namespace Talkish.Dal
 
             builder.Entity<Topic>()
                 .HasIndex((topic) => topic.Name)
-                .IsUnique(); 
+                .IsUnique();
 
             builder.Entity<Blog>()
                 .HasOne((blog) => blog.Author)

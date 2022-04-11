@@ -45,7 +45,7 @@ namespace Talkish.Dal.Repositories
 
                 User followedUser = await _ctx.Users.FirstOrDefaultAsync((user) => user.UserId == FollowedUserId);
 
-                if (followedUser is null)
+                if (followedUser is null || followingUser is null)
                 {
                     throw new Exception();
                 }
@@ -56,7 +56,7 @@ namespace Talkish.Dal.Repositories
 
                 _ctx.SaveChanges();
 
-                transaction.Commit();
+                await transaction.CommitAsync();
 
                 return true;
             } catch (Exception)
