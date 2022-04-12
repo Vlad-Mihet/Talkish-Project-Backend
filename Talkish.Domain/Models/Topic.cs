@@ -12,6 +12,6 @@ namespace Talkish.Domain.Models
         [Display(Name = "Topic Name")]
         public string Name { get; set; }
 
-        public List<Blog> Blogs { get; set; }
+        public List<Blog> Blogs { get; set; } = new List<Blog>();
     }
 }

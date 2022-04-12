@@ -11,15 +11,16 @@ namespace Talkish.API.Profiles
             CreateMap<Author, AddAuthorDTO>()
                 .ReverseMap();
 
-            CreateMap<Author, UpdateAuthorDTO>()
-                .ReverseMap();
+            CreateMap<Author, AuthorDTO>()
+                .ForMember(authorDTO => authorDTO.FirstName, opt => opt.MapFrom(author => author.UserProfile.BasicInfo.FirstName))
+                .ForMember(authorDTO => authorDTO.LastName, opt => opt.MapFrom(author => author.UserProfile.BasicInfo.LastName));
 
-            CreateMap<Author, AuthorDTO>();
-
-            CreateMap<Author, AuthorWithBlogsDTO>();
+            CreateMap<Author, AuthorWithBlogsDTO>()
+                .ForMember(authorDTO => authorDTO.FirstName, opt => opt.MapFrom(author => author.UserProfile.BasicInfo.FirstName))
+                .ForMember(authorDTO => authorDTO.LastName, opt => opt.MapFrom(author => author.UserProfile.BasicInfo.LastName));
 
             CreateMap<Author, BlogAuthorDTO>()
-                .ForMember(authorDTO => authorDTO.AuthorName, opt => opt.MapFrom(author => $"{author.FirstName} {author.LastName}"));
+                .ForMember(authorDTO => authorDTO.AuthorName, opt => opt.MapFrom(author => $"{author.UserProfile.BasicInfo.FirstName} {author.UserProfile.BasicInfo.LastName}"));
         }
     }
 }

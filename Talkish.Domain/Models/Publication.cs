@@ -27,8 +27,8 @@ namespace Talkish.Domain.Models
         // The owner created a relationship in our db
         public Author Owner { get; set; }
 
-        public List<Author> Authors { get; set; }
+        public List<Author> Authors { get; set; } = new List<Author>();
 
-        public List<Blog> Blogs { get; set; }
+        public List<Blog> Blogs { get; set; } = new List<Blog>();
     }
 }

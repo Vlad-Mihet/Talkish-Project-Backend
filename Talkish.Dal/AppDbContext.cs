@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Talkish.Domain.Models;
 
 namespace Talkish.Dal
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<IdentityUser>
     {
         public AppDbContext(DbContextOptions options) : base(options)
         {
@@ -17,8 +19,16 @@ namespace Talkish.Dal
 
         public DbSet<Publication> Publications { get; set; }
 
+        public DbSet<User> Users { get; set; }
+
+        public DbSet<BasicInfo> BasicInfo { get; set; }
+
+        public DbSet<Follower> Followers { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
+             base.OnModelCreating(builder);
+
             builder.Entity<Topic>()
                 .HasIndex((topic) => topic.Name)
                 .IsUnique();
@@ -31,6 +41,21 @@ namespace Talkish.Dal
             builder.Entity<Publication>()
                 .HasIndex((publication) => publication.Name)
                 .IsUnique();
+
+            builder.Entity<User>()
+                .HasOne((user) => user.AuthorProfile)
+                .WithOne((authorProfile) => authorProfile.UserProfile)
+                .HasForeignKey<User>((user) => user.AuthorId);
+
+            builder.Entity<Author>()
+                .HasOne((author) => author.UserProfile)
+                .WithOne((user) => user.AuthorProfile)
+                .HasForeignKey<Author>((author) => author.UserId);
+
+            builder.Entity<User>()
+                .HasMany((follower) => follower.Following)
+                .WithMany((following) => following.Followers);
+
         }
     }
 }

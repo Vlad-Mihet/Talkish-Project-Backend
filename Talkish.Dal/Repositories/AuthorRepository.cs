@@ -70,22 +70,5 @@ namespace Talkish.Dal.Repositories
                 .FirstOrDefaultAsync((author) => author.AuthorId == Id);
             return author;
         }
-
-        public async Task<Author> UpdateAuthorAsync(int AuthorId, Author AuthorData)
-        {
-            Author author = await _ctx.Authors.FirstOrDefaultAsync((author) => author.AuthorId == AuthorId);
-            
-            if (author == null)
-            {
-                return null;
-            }
-
-            author.FirstName = AuthorData.FirstName;
-            author.LastName = AuthorData.LastName;
-            author.Email = AuthorData.Email;
-            _ctx.Authors.Update(author);
-            await _ctx.SaveChangesAsync();
-            return author;
-        }
     }
 }

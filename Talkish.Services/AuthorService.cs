@@ -43,11 +43,5 @@ namespace Talkish.Services
             Author author = await _repo.DeleteAuthorByIdAsync(Id);
             return author;
         }
-
-        public async Task<Author> UpdateAuthor(int AuthorId, Author AuthorData)
-        {
-            Author author = await _repo.UpdateAuthorAsync(AuthorId, AuthorData);
-            return author;
-        }
     }
 }
