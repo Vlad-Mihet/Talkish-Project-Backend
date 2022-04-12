@@ -89,6 +89,7 @@ namespace Talkish.Dal.Repositories
             User user = await _ctx.Users
                 .Include((user) => user.BasicInfo)
                 .Include((user) => user.Followers)
+                .ThenInclude((follower) => follower.BasicInfo)
                 .FirstOrDefaultAsync((user) => user.UserId == Id);
 
             return user.Followers;
@@ -98,6 +99,7 @@ namespace Talkish.Dal.Repositories
             User user = await _ctx.Users
                 .Include((user) => user.BasicInfo)
                 .Include((user) => user.Following)
+                .ThenInclude((follower) => follower.BasicInfo)
                 .FirstOrDefaultAsync((user) => user.UserId == Id);
 
             return user.Following;

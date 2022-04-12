@@ -25,7 +25,7 @@ namespace Talkish.Domain.Models
         [Display(Name = "Blog Reading Time")]
         public int ReadingTime { get; set; }
 
-        public List<Topic> Topics { get; set; }
+        public List<Topic> Topics { get; set; } = new List<Topic>();
 
         public Author Author { get; set; }
     }

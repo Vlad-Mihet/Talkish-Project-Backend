@@ -16,10 +16,10 @@ namespace Talkish.Domain.Models
         public int AuthorId { get; set; }
 
         [Display(Name = "Users that are following this user")]
-        public List<User> Followers { get; set; }
+        public List<User> Followers { get; set; } = new List<User>();
 
         [Display(Name = "Users that this user is following")]
-        public List<User> Following { get; set; }
+        public List<User> Following { get; set; } = new List<User>();
 
         public string IdentityId { get; set; }
 
