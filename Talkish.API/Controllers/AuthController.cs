@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Talkish.API.DTOs;
 using Talkish.API.Responses;
-using Talkish.Domain.Interfaces;
 using Talkish.Domain.Models;
+using Talkish.Services;
+using Talkish.Services.DTOs;
 
 namespace Talkish.API.Controllers
 {
@@ -16,10 +16,10 @@ namespace Talkish.API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IAuthService _service;
+        private readonly AuthService _service;
         private readonly IMapper _mapper;
 
-        public AuthController(IAuthService service, IMapper mapper)
+        public AuthController(AuthService service, IMapper mapper)
         {
             _service = service;
             _mapper = mapper;
@@ -27,13 +27,13 @@ namespace Talkish.API.Controllers
 
         [HttpPost]
         [Route("registration")]
-        public async Task<IActionResult> Register([FromBody] AuthRegisterDTO RegistrationData)
+        public async Task<IActionResult> Register([FromBody] RegisterDTO RegistrationData)
         {
             if (ModelState.IsValid)
             {
-                User createdUser = await _service.Register(RegistrationData);
+                User registeredUser = await _service.Register(RegistrationData);
 
-                if (createdUser == null)
+                if (registeredUser == null)
                 {
                     ErrorResponse error = new()
                     {
@@ -45,14 +45,17 @@ namespace Talkish.API.Controllers
                     return BadRequest(error);
                 }
 
+                RegisteredUserDTO registeredUserDTO = _mapper.Map<RegisteredUserDTO>(registeredUser);
+
                 SuccessResponse response = new()
                 {
-                    Payload = createdUser,
+                    Payload = registeredUserDTO,
                     Status = 201,
                 };
 
                 // Will have to manually add the "/users/{id}" controller action later on as a CreatedAtAction param
-                return Ok(response);
+                // TEMPORARY FIX!
+                return Created("", response);
             } else
             {
                 List<string> errors = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage)).ToList();
@@ -70,7 +73,7 @@ namespace Talkish.API.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] AuthLoginDTO LoginData)
+        public async Task<IActionResult> Login([FromBody] LoginDTO LoginData)
         {
             if (ModelState.IsValid)
             {
@@ -88,13 +91,7 @@ namespace Talkish.API.Controllers
                     return BadRequest(error);
                 }
 
-                SuccessResponse response = new()
-                {
-                    Payload = loggedUser,
-                    Status = 200,
-                };
-
-                return Ok(response);
+                return NoContent();
             } else
             {
                 List<string> errors = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage)).ToList();

@@ -89,8 +89,7 @@ namespace Talkish.API
             services.AddScoped<IAuthorService, AuthorService>();
             services.AddScoped<ITopicService, TopicService>();
             services.AddScoped<IPublicationService, PublicationService>();
-            services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<AuthService>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddAutoMapper(typeof(Startup));
