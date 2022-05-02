@@ -54,7 +54,8 @@ namespace Talkish.API.Controllers
                 };
 
                 // Will have to manually add the "/users/{id}" controller action later on as a CreatedAtAction param
-                return Ok(response);
+                // TEMPORARY FIX!
+                return Created("", response);
             } else
             {
                 List<string> errors = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage)).ToList();
