@@ -4,12 +4,12 @@ using Newtonsoft.Json;
 using System.Threading.Tasks;
 using Talkish.Dal;
 using Microsoft.Extensions.Logging;
-using Talkish.Domain.Interfaces;
 using Talkish.Domain.Models;
+using Talkish.Services.DTOs;
 
 namespace Talkish.Services
 {
-    public class AuthService : IAuthService
+    public class AuthService
     {
         private readonly AppDbContext _ctx;
         private readonly UserManager<IdentityUser> _userManager;
@@ -22,7 +22,7 @@ namespace Talkish.Services
             _logger = logger;
         }
 
-        public async Task<IdentityUser> Login(dynamic LoginData)
+        public async Task<IdentityUser> Login(LoginDTO LoginData)
         {
             try
             {
@@ -43,7 +43,7 @@ namespace Talkish.Services
             }
         }
 
-        public async Task<User> Register(dynamic RegistrationData)
+        public async Task<User> Register(RegisterDTO RegistrationData)
         {
             await using var transaction = await _ctx.Database.BeginTransactionAsync();
 
