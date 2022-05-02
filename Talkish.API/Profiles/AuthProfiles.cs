@@ -8,7 +8,11 @@ namespace Talkish.API.Profiles
     {
         public AuthProfiles()
         {
-            CreateMap<User, RegisteredUserDTO>();
+            CreateMap<User, RegisteredUserDTO>()
+                .ForMember(registeredUserDTO => registeredUserDTO.Id, opt => opt.MapFrom(user => user.UserId))
+                .ForMember(registeredUserDTO => registeredUserDTO.FirstName, opt => opt.MapFrom(user => user.BasicInfo.FirstName))
+                .ForMember(registeredUserDTO => registeredUserDTO.LastName, opt => opt.MapFrom(user => user.BasicInfo.LastName))
+                .ForMember(registeredUserDTO => registeredUserDTO.Email, opt => opt.MapFrom(user => user.BasicInfo.Email));
         }
     }
 }

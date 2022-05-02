@@ -1,13 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Talkish.API.DTOs;
 using Talkish.API.Responses;
-using Talkish.Domain.Interfaces;
 using Talkish.Domain.Models;
 using Talkish.Services;
 using Talkish.Services.DTOs;
@@ -33,11 +31,9 @@ namespace Talkish.API.Controllers
         {
             if (ModelState.IsValid)
             {
-                User createdUser = await _service.Register(RegistrationData);
+                User registeredUser = await _service.Register(RegistrationData);
 
-                RegisteredUserDTO registeredUserDTO = _mapper.Map<RegisteredUserDTO>(createdUser);
-
-                if (createdUser == null)
+                if (registeredUser == null)
                 {
                     ErrorResponse error = new()
                     {
@@ -49,9 +45,11 @@ namespace Talkish.API.Controllers
                     return BadRequest(error);
                 }
 
+                RegisteredUserDTO registeredUserDTO = _mapper.Map<RegisteredUserDTO>(registeredUser);
+
                 SuccessResponse response = new()
                 {
-                    Payload = createdUser,
+                    Payload = registeredUserDTO,
                     Status = 201,
                 };
 
