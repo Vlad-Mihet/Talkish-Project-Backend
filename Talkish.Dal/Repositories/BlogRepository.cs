@@ -41,6 +41,8 @@ namespace Talkish.Dal.Repositories
         {
             List<Blog> blogs = await _ctx.Blogs
                 .Include((b) => b.Author)
+                .ThenInclude((author) => author.UserProfile)
+                .ThenInclude((userProfile) => userProfile.BasicInfo)
                 .Include((b) => b.Topics)
                 .ToListAsync();
 
@@ -52,6 +54,8 @@ namespace Talkish.Dal.Repositories
             Blog blog = await _ctx.Blogs
                 .Where((blog) => blog.BlogId == Id)
                 .Include((b) => b.Author)
+                .ThenInclude((author) => author.UserProfile)
+                .ThenInclude((userProfile) => userProfile.BasicInfo)
                 .Include((b) => b.Topics)
                 .FirstOrDefaultAsync();
             return blog;
@@ -91,7 +95,9 @@ namespace Talkish.Dal.Repositories
         {
             Blog blog = await _ctx.Blogs
                 .Include((blog) => blog.Topics)
-                .Include((blog) => blog.Author)
+                .Include((b) => b.Author)
+                .ThenInclude((author) => author.UserProfile)
+                .ThenInclude((userProfile) => userProfile.BasicInfo)
                 .FirstOrDefaultAsync((blog) => blog.BlogId == Id);
             Topic topic = await _ctx.Topics
                 .Where((topic) => topic.TopicId == TopicId)

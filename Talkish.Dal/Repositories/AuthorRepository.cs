@@ -16,8 +16,18 @@ namespace Talkish.Dal.Repositories
             _ctx = ctx;
         }
 
-        public async Task<Author> CreateAuthorAsync(Author author)
+        public async Task<Author> CreateAuthorAsync(int UserId)
         {
+            User user = await _ctx.Users
+                .Include((user) => user.BasicInfo)
+                .FirstOrDefaultAsync((user) => user.UserId == UserId);
+
+            Author author = new()
+            {
+                UserId = user.UserId,
+                UserProfile = user,
+            };
+
             _ctx.Authors.Add(author);
             await _ctx.SaveChangesAsync();
             return author;
@@ -26,12 +36,12 @@ namespace Talkish.Dal.Repositories
         public async Task<Author> DeleteAuthorByIdAsync(int id)
         {
             Author authorToRemove = await _ctx.Authors.FirstOrDefaultAsync((a) => a.AuthorId == id);
-            
+
             if (authorToRemove == null)
             {
                 return null;
             }
-            
+
             _ctx.Authors.Remove(authorToRemove);
             await _ctx.SaveChangesAsync();
             return authorToRemove;
@@ -40,6 +50,8 @@ namespace Talkish.Dal.Repositories
         public async Task<List<Blog>> GetAuthorBlogsByAuthorIdAsync(int id)
         {
             Author author = await _ctx.Authors
+                .Include((author) => author.UserProfile)
+                .ThenInclude((userProfile) => userProfile.BasicInfo)
                 .Include((author) => author.Blogs)
                 .ThenInclude((blog) => blog.Topics)
                 .FirstOrDefaultAsync((author) => author.AuthorId == id);
@@ -57,6 +69,8 @@ namespace Talkish.Dal.Repositories
         public async Task<List<Author>> GetAllAuthorsAsync()
         {
             return await _ctx.Authors
+                .Include((author) => author.UserProfile)
+                .ThenInclude((userProfile) => userProfile.BasicInfo)
                 .Include((author) => author.Blogs)
                 .ThenInclude((blog) => blog.Topics)
                 .ToListAsync();
@@ -65,6 +79,8 @@ namespace Talkish.Dal.Repositories
         public async Task<Author> GetAuthorByIdAsync(int Id)
         {
             Author author = await _ctx.Authors
+                .Include((author) => author.UserProfile)
+                .ThenInclude((userProfile) => userProfile.BasicInfo)
                 .Include((author) => author.Blogs)
                 .ThenInclude((blog) => blog.Topics)
                 .FirstOrDefaultAsync((author) => author.AuthorId == Id);

@@ -24,17 +24,17 @@ namespace Talkish.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAuthor([FromBody] AddAuthorDTO AuthorData)
+        public async Task<IActionResult> CreateAuthor([FromBody] int UserId)
         {
             if (ModelState.IsValid)
             {
-                Author author = _mapper.Map<Author>(AuthorData);
-                Author createdAuthor = await _service.CreateAuthor(author);
+                Author createdAuthor = await _service.CreateAuthor(UserId);
+                AuthorDTO createdAuthorDTO = _mapper.Map<AuthorDTO>(createdAuthor);
 
 
                 SuccessResponse response = new()
                 {
-                    Payload = AuthorData,
+                    Payload = createdAuthorDTO,
                     Status = 201
                 };
 

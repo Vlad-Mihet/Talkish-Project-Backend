@@ -6,7 +6,7 @@ namespace Talkish.Domain.Interfaces
 {
     public interface IAuthorService
     {
-        Task<Author> CreateAuthor(Author AuthorData);
+        Task<Author> CreateAuthor(int UserId);
 
         Task<List<Author>> GetAllAuthors();
 

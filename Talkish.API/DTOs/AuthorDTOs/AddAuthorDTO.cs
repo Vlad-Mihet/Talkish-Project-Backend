@@ -1,9 +1,7 @@
-﻿using Talkish.Domain.Models;
-
-namespace Talkish.API.DTOs
+﻿namespace Talkish.API.DTOs
 {
     public class AddAuthorDTO
     {
-        public User UserProfile { get; set; }
+        public int UserId { get; set; }
     }
 }
