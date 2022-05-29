@@ -1,12 +1,9 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Talkish.API.DTOs;
 using Talkish.API.Responses;
-using Talkish.Domain.Models;
 using Talkish.Services;
 using Talkish.Services.DTOs;
 
@@ -17,12 +14,10 @@ namespace Talkish.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly AuthService _service;
-        private readonly IMapper _mapper;
 
-        public AuthController(AuthService service, IMapper mapper)
+        public AuthController(AuthService service)
         {
             _service = service;
-            _mapper = mapper;
         }
 
         [HttpPost]
@@ -31,31 +26,30 @@ namespace Talkish.API.Controllers
         {
             if (ModelState.IsValid)
             {
-                User registeredUser = await _service.Register(RegistrationData);
+                try
+                {
+                    string jwtToken = await _service.Register(RegistrationData);
 
-                if (registeredUser == null)
+                    SuccessResponse response = new()
+                    {
+                        Payload = jwtToken,
+                        Status = 201,
+                    };
+
+                    // Will have to manually add the "/users/{id}" controller action later on as a CreatedAtAction param
+                    // TEMPORARY FIX!
+                    return Created("", response);
+                } catch (Exception err)
                 {
                     ErrorResponse error = new()
                     {
-                        ErrorMessage = "Invalid User Registration Data",
-                        Errors = new List<string>(),
+                        ErrorMessage = "There was an issue creating the user",
+                        Errors = new List<string>(err.Message.First()),
                         Status = 400,
                     };
 
                     return BadRequest(error);
                 }
-
-                RegisteredUserDTO registeredUserDTO = _mapper.Map<RegisteredUserDTO>(registeredUser);
-
-                SuccessResponse response = new()
-                {
-                    Payload = registeredUserDTO,
-                    Status = 201,
-                };
-
-                // Will have to manually add the "/users/{id}" controller action later on as a CreatedAtAction param
-                // TEMPORARY FIX!
-                return Created("", response);
             } else
             {
                 List<string> errors = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage)).ToList();
@@ -77,21 +71,27 @@ namespace Talkish.API.Controllers
         {
             if (ModelState.IsValid)
             {
-                IdentityUser loggedUser = await _service.Login(LoginData);
+                try {
+                    string jwtToken = await _service.Login(LoginData);
 
-                if (loggedUser is null)
-                {
+                    SuccessResponse response = new()
+                    {
+                        Payload = jwtToken,
+                        Status = 200,
+                    };
+
+                    return Ok(response);
+                } catch (Exception err) {
                     ErrorResponse error = new()
                     {
                         ErrorMessage = "Invalid Auth Credentials",
-                        Errors = new List<string>(),
+                        Errors = new List<string>(err.Message.First()),
                         Status = 400,
+
                     };
 
                     return BadRequest(error);
                 }
-
-                return NoContent();
             } else
             {
                 List<string> errors = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage)).ToList();
