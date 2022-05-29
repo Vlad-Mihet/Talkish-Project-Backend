@@ -8,7 +8,7 @@ namespace Talkish.Domain.Interfaces
     {
         Task<Author> GetAuthorByIdAsync(int Id);
 
-        Task<Author> CreateAuthorAsync(Author Author);
+        Task<Author> CreateAuthorAsync(int UserId);
 
         Task<Author> DeleteAuthorByIdAsync(int Id);
 

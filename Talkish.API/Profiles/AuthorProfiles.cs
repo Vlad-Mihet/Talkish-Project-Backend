@@ -13,7 +13,8 @@ namespace Talkish.API.Profiles
 
             CreateMap<Author, AuthorDTO>()
                 .ForMember(authorDTO => authorDTO.FirstName, opt => opt.MapFrom(author => author.UserProfile.BasicInfo.FirstName))
-                .ForMember(authorDTO => authorDTO.LastName, opt => opt.MapFrom(author => author.UserProfile.BasicInfo.LastName));
+                .ForMember(authorDTO => authorDTO.LastName, opt => opt.MapFrom(author => author.UserProfile.BasicInfo.LastName))
+                .ForMember(authorDTO => authorDTO.Email, opt => opt.MapFrom(author => author.UserProfile.BasicInfo.Email));
 
             CreateMap<Author, AuthorWithBlogsDTO>()
                 .ForMember(authorDTO => authorDTO.FirstName, opt => opt.MapFrom(author => author.UserProfile.BasicInfo.FirstName))

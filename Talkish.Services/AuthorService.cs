@@ -14,9 +14,9 @@ namespace Talkish.Services
             _repo = repo;
         }
 
-        public async Task<Author> CreateAuthor(Author AuthorData)
+        public async Task<Author> CreateAuthor(int UserId)
         {
-            Author author = await _repo.CreateAuthorAsync(AuthorData);
+            Author author = await _repo.CreateAuthorAsync(UserId);
             return author;
         }
 
