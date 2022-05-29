@@ -19,7 +19,11 @@ namespace Talkish.Services
         {
             int blogContentLength = BlogContent.Split(null).Length;
             const int wordsPerMinute = 225;
-            return Convert.ToInt32(Math.Ceiling((double)blogContentLength / wordsPerMinute));
+
+            int readingTime = Convert.ToInt32(Math.Ceiling((double)blogContentLength / wordsPerMinute));
+            if (readingTime == 0) return 1;
+
+            return readingTime;
         }
 
         public async Task<Blog> CreateBlog(Blog BlogData)
