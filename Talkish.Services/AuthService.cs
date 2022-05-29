@@ -6,6 +6,13 @@ using Talkish.Dal;
 using Microsoft.Extensions.Logging;
 using Talkish.Domain.Models;
 using Talkish.Services.DTOs;
+using Microsoft.Extensions.Options;
+using System.Text;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+using Talkish.Services.Options;
+using Microsoft.EntityFrameworkCore;
 
 namespace Talkish.Services
 {
@@ -14,36 +21,42 @@ namespace Talkish.Services
         private readonly AppDbContext _ctx;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger _logger;
+        private readonly JwtSettings _jwtSettings;
+        private readonly byte[] _key;
 
-        public AuthService(UserManager<IdentityUser> userManager, AppDbContext ctx, ILogger<AuthService> logger)
+        public AuthService(UserManager<IdentityUser> userManager, AppDbContext ctx, ILogger<AuthService> logger, IOptions<JwtSettings> jwtOptions)
         {
             _ctx = ctx;
             _userManager = userManager;
             _logger = logger;
+            _jwtSettings = jwtOptions.Value;
+            _key = Encoding.ASCII.GetBytes(_jwtSettings.SigningKey);
         }
 
-        public async Task<IdentityUser> Login(LoginDTO LoginData)
+        public async Task<string> Login(LoginDTO LoginData)
         {
             try
             {
                 IdentityUser identityUser = await ValidateAndGetIdentityAsync(LoginData);
 
-                if (identityUser is null)
+                User user = await _ctx.Users.FirstOrDefaultAsync((user) => user.IdentityId == identityUser.Id);
+
+                if (user is null)
                 {
-                    return null;
+                    throw new Exception("User doesn't exist");
                 }
 
-                return identityUser;
+                return GetJwtString(identityUser, user);
 
             }
             catch (Exception e)
             {
                 _logger.LogDebug(JsonConvert.SerializeObject(e));
-                return null;
+                throw;
             }
         }
 
-        public async Task<User> Register(RegisterDTO RegistrationData)
+        public async Task<string> Register(RegisterDTO RegistrationData)
         {
             await using var transaction = await _ctx.Database.BeginTransactionAsync();
 
@@ -53,7 +66,7 @@ namespace Talkish.Services
 
                 if (existingIdentity != null)
                 {
-                    return null;
+                    throw new Exception("User does already exist");
                 }
 
                 var identity = await CreateIdentityUserAsync(RegistrationData);
@@ -62,18 +75,18 @@ namespace Talkish.Services
 
                 if (identity is null || user is null)
                 {
-                    return null;
+                    throw new Exception("There was an issue creating the user");
                 }
 
                 await transaction.CommitAsync();
 
-                return user;
+                return GetJwtString(identity, user);
             }
             catch (Exception ex)
             {
                 _logger.LogDebug(JsonConvert.SerializeObject(ex));
                 await transaction.RollbackAsync();
-                return null;
+                throw;
             }
         }
 
@@ -102,7 +115,7 @@ namespace Talkish.Services
             return existingIdentity;
         }
 
-        public async Task<IdentityUser> CreateIdentityUserAsync(dynamic RegistrationData)
+        private async Task<IdentityUser> CreateIdentityUserAsync(dynamic RegistrationData)
         {
             IdentityUser identity = new()
             {
@@ -151,6 +164,48 @@ namespace Talkish.Services
             {
                 throw;
             }
+        }
+
+        public readonly JwtSecurityTokenHandler TokenHandler = new();
+
+        public SecurityToken CreateSecurityToken(ClaimsIdentity identity)
+        {
+            var tokenDescriptor = GetTokenDescriptor(identity);
+
+            return TokenHandler.CreateToken(tokenDescriptor);
+        }
+
+        public string WriteToken(SecurityToken token)
+        {
+            return TokenHandler.WriteToken(token);
+        }
+
+        private SecurityTokenDescriptor GetTokenDescriptor(ClaimsIdentity identity)
+        {
+            return new SecurityTokenDescriptor()
+            {
+                Subject = identity,
+                Expires = DateTime.Now.AddHours(48),
+                Audience = _jwtSettings.Audiences[0],
+                Issuer = _jwtSettings.Issuer,
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(_key),
+                    SecurityAlgorithms.HmacSha256Signature)
+            };
+        }
+
+        private string GetJwtString(IdentityUser identityUser, User user)
+        {
+            var claimsIdentity = new ClaimsIdentity(new Claim[]
+            {
+            new Claim(JwtRegisteredClaimNames.Sub, identityUser.Email),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(JwtRegisteredClaimNames.Email, identityUser.Email),
+            new Claim("IdentityId", identityUser.Id),
+            new Claim("UserId", user.UserId.ToString())
+            });
+
+            var token = this.CreateSecurityToken(claimsIdentity);
+            return this.WriteToken(token);
         }
     }
 }
