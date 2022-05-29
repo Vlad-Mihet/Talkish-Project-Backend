@@ -12,6 +12,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using Talkish.Services.Options;
+using Microsoft.EntityFrameworkCore;
 
 namespace Talkish.Services
 {
@@ -32,28 +33,30 @@ namespace Talkish.Services
             _key = Encoding.ASCII.GetBytes(_jwtSettings.SigningKey);
         }
 
-        public async Task<IdentityUser> Login(LoginDTO LoginData)
+        public async Task<string> Login(LoginDTO LoginData)
         {
             try
             {
                 IdentityUser identityUser = await ValidateAndGetIdentityAsync(LoginData);
 
-                if (identityUser is null)
+                User user = await _ctx.Users.FirstOrDefaultAsync((user) => user.IdentityId == identityUser.Id);
+
+                if (user is null)
                 {
-                    return null;
+                    throw new Exception("User doesn't exist");
                 }
 
-                return identityUser;
+                return GetJwtString(identityUser, user);
 
             }
             catch (Exception e)
             {
                 _logger.LogDebug(JsonConvert.SerializeObject(e));
-                return null;
+                throw;
             }
         }
 
-        public async Task<User> Register(RegisterDTO RegistrationData)
+        public async Task<string> Register(RegisterDTO RegistrationData)
         {
             await using var transaction = await _ctx.Database.BeginTransactionAsync();
 
@@ -63,7 +66,7 @@ namespace Talkish.Services
 
                 if (existingIdentity != null)
                 {
-                    return null;
+                    throw new Exception("User does already exist");
                 }
 
                 var identity = await CreateIdentityUserAsync(RegistrationData);
@@ -72,18 +75,18 @@ namespace Talkish.Services
 
                 if (identity is null || user is null)
                 {
-                    return null;
+                    throw new Exception("There was an issue creating the user");
                 }
 
                 await transaction.CommitAsync();
 
-                return user;
+                return GetJwtString(identity, user);
             }
             catch (Exception ex)
             {
                 _logger.LogDebug(JsonConvert.SerializeObject(ex));
                 await transaction.RollbackAsync();
-                return null;
+                throw;
             }
         }
 
@@ -188,6 +191,21 @@ namespace Talkish.Services
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(_key),
                     SecurityAlgorithms.HmacSha256Signature)
             };
+        }
+
+        private string GetJwtString(IdentityUser identityUser, User user)
+        {
+            var claimsIdentity = new ClaimsIdentity(new Claim[]
+            {
+            new Claim(JwtRegisteredClaimNames.Sub, identityUser.Email),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(JwtRegisteredClaimNames.Email, identityUser.Email),
+            new Claim("IdentityId", identityUser.Id),
+            new Claim("UserId", user.UserId.ToString())
+            });
+
+            var token = this.CreateSecurityToken(claimsIdentity);
+            return this.WriteToken(token);
         }
     }
 }

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -115,6 +114,9 @@ namespace Talkish.API
                 jwt.ClaimsIssuer = jwtSettings.Issuer;
             });
 
+            services.AddIdentityCore<IdentityUser>()
+                .AddEntityFrameworkStores<AppDbContext>();
+
             services.AddScoped<ValidationActionFilter>();
             services.AddScoped<IBlogRepository, BlogRepository>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();
@@ -128,12 +130,6 @@ namespace Talkish.API
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddAutoMapper(typeof(Startup));
-
-            // Suppress Automatic Validation Bad Request Response
-            services.Configure<ApiBehaviorOptions>(options =>
-            {
-                options.SuppressModelStateInvalidFilter = true;
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
