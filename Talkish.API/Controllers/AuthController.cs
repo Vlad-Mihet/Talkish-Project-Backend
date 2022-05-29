@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +14,10 @@ namespace Talkish.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly AuthService _service;
-        private readonly IMapper _mapper;
 
-        public AuthController(AuthService service, IMapper mapper)
+        public AuthController(AuthService service)
         {
             _service = service;
-            _mapper = mapper;
         }
 
         [HttpPost]
