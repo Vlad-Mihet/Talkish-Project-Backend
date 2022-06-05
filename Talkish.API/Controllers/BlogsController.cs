@@ -101,10 +101,11 @@ namespace Talkish.API.Controllers
                 Blog blog = _mapper.Map<Blog>(BlogData);
                 Blog createdBlog = await _service.CreateBlog(blog);
 
+                CreatedBlogDTO createdBlogId = _mapper.Map<CreatedBlogDTO>(createdBlog);
 
                 SuccessResponse response = new()
                 {
-                    Payload = BlogData,
+                    Payload = createdBlogId,
                     Status = 201
                 };
 
