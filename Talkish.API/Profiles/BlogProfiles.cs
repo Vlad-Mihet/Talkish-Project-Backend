@@ -18,6 +18,8 @@ namespace Talkish.API.Profiles
                 .ReverseMap();
 
             CreateMap<Blog, BlogDTO>();
+
+            CreateMap<Blog, CreatedBlogDTO>();
         }
     }
 }
