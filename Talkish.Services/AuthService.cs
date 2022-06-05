@@ -197,15 +197,15 @@ namespace Talkish.Services
         {
             var claimsIdentity = new ClaimsIdentity(new Claim[]
             {
-            new Claim(JwtRegisteredClaimNames.Sub, identityUser.Email),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Email, identityUser.Email),
-            new Claim("IdentityId", identityUser.Id),
-            new Claim("UserId", user.UserId.ToString())
+                new Claim(JwtRegisteredClaimNames.Sub, identityUser.Email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, identityUser.Email),
+                new Claim("IdentityId", identityUser.Id),
+                new Claim("UserId", user.UserId.ToString())
             });
 
-            var token = this.CreateSecurityToken(claimsIdentity);
-            return this.WriteToken(token);
+            var token = CreateSecurityToken(claimsIdentity);
+            return WriteToken(token);
         }
     }
 }
