@@ -17,6 +17,8 @@ namespace Talkish.API.DTOs
         [StringLength(100000, MinimumLength = 30, ErrorMessage = "Blog content must be longer than 30 characters")]
         public string Content { get; set; }
 
+        public bool IsDraft { get; set; }
+
         [ForeignKey("Author")]
         public int AuthorId { get; set; }
     }
