@@ -70,6 +70,7 @@ namespace Talkish.Dal.Repositories
         {
             List<User> users = await _ctx.Users
                 .Include((user) => user.BasicInfo)
+                .Include((user) => user.AuthorProfile)
                 .ToListAsync();
 
             return users;

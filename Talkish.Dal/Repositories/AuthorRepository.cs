@@ -1,4 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,27 +13,47 @@ namespace Talkish.Dal.Repositories
     public class AuthorRepository : IAuthorRepository
     {
         private readonly AppDbContext _ctx;
+        private readonly ILogger _logger;
 
-        public AuthorRepository(AppDbContext ctx)
+        public AuthorRepository(AppDbContext ctx, ILogger<AuthorRepository> logger)
         {
             _ctx = ctx;
+            _logger = logger;
         }
 
         public async Task<Author> CreateAuthorAsync(int UserId)
         {
-            User user = await _ctx.Users
-                .Include((user) => user.BasicInfo)
-                .FirstOrDefaultAsync((user) => user.UserId == UserId);
+            await using var transaction = await _ctx.Database.BeginTransactionAsync();
 
-            Author author = new()
+            try
             {
-                UserId = user.UserId,
-                UserProfile = user,
-            };
+                User user = await _ctx.Users
+                    .Include((user) => user.BasicInfo)
+                    .FirstOrDefaultAsync((user) => user.UserId == UserId);
 
-            _ctx.Authors.Add(author);
-            await _ctx.SaveChangesAsync();
-            return author;
+                Author author = new()
+                {
+                    UserId = user.UserId,
+                    UserProfile = user,
+                };
+
+                _ctx.Authors.Add(author);
+
+                await _ctx.SaveChangesAsync();
+
+                user.AuthorId = author.AuthorId;
+
+                await _ctx.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+
+                return author;
+            } catch (Exception ex)
+            {
+                _logger.LogDebug(JsonConvert.SerializeObject(ex));
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
 
         public async Task<Author> DeleteAuthorByIdAsync(int id)
