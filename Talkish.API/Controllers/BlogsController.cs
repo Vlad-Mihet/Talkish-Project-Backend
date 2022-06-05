@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -98,18 +99,37 @@ namespace Talkish.API.Controllers
         {
             if (ModelState.IsValid)
             {
-                Blog blog = _mapper.Map<Blog>(BlogData);
-                Blog createdBlog = await _service.CreateBlog(blog);
-
-                CreatedBlogDTO createdBlogId = _mapper.Map<CreatedBlogDTO>(createdBlog);
-
-                SuccessResponse response = new()
+                try
                 {
-                    Payload = createdBlogId,
-                    Status = 201
-                };
+                    // Will replace with some HTML empty markup validation (Guard against empty tags, as that's what CKEditor will give us)
+                    if (string.IsNullOrWhiteSpace(BlogData.Content) && string.IsNullOrWhiteSpace(BlogData.Title))
+                    {
+                        throw new Exception("A blog must either have a title or some content");
+                    }
 
-                return CreatedAtAction(nameof(GetBlogById), new { Id = createdBlog.BlogId }, response);
+                    Blog blog = _mapper.Map<Blog>(BlogData);
+                    Blog createdBlog = await _service.CreateBlog(blog);
+
+                    CreatedBlogDTO createdBlogId = _mapper.Map<CreatedBlogDTO>(createdBlog);
+
+                    SuccessResponse response = new()
+                    {
+                        Payload = createdBlogId,
+                        Status = 201
+                    };
+
+                    return CreatedAtAction(nameof(GetBlogById), new { Id = createdBlog.BlogId }, response);
+                } catch (Exception ex)
+                {
+                    ErrorResponse error = new()
+                    {
+                        ErrorMessage = ex.Message.ToString(),
+                        Errors = new List<string>(),
+                        Status = 400,
+                    };
+
+                    return BadRequest(error);
+                }
             } else
             {
                 List<string> errors = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage)).ToList();
