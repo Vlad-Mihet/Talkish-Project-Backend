@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +23,7 @@ namespace Talkish.API.Controllers
         }
 
         [HttpPost]
-        [Route("registration")]
+        [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO RegistrationData)
         {
             if (ModelState.IsValid)
