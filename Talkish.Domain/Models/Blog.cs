@@ -22,7 +22,7 @@ namespace Talkish.Domain.Models
         public string Content { get; set; }
 
         [Display(Name = "Draft Story")]
-        public bool IsDraft { get; set; } = false;
+        public bool IsDraft { get; set; } = true;
 
         [DataType(DataType.DateTime)]
         [Display(Name = "Published At")]
