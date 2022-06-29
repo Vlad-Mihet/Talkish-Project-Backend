@@ -127,6 +127,7 @@ namespace Talkish.API
             services.AddScoped<ITopicService, TopicService>();
             services.AddScoped<IPublicationService, PublicationService>();
             services.AddScoped<AuthService>();
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddAutoMapper(typeof(Startup));
         }
