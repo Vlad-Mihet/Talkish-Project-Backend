@@ -99,9 +99,11 @@ namespace Talkish.API.Controllers
 
         [Route("{Id}/Blogs")]
         [HttpGet]
-        public async Task<IActionResult> GetAuthorBlogsByAuthorIdAsync([FromRoute] int Id)
+        public async Task<IActionResult> GetAuthorBlogsByAuthorIdAsync([FromRoute] int Id, [FromQuery] bool drafts)
         {
-            List<Blog> blogs = await _service.GetAuthorBlogs(Id);
+            List<Blog> blogs = drafts == true
+                ? await _service.GetAuthorDraftBlogs(Id)
+                : await _service.GetAuthorBlogs(Id);
             List<BlogDTO> blogDTOs = _mapper.Map<List<BlogDTO>>(blogs);
 
             if (blogs == null)

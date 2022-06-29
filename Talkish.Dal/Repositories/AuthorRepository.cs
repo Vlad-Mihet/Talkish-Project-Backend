@@ -66,6 +66,24 @@ namespace Talkish.Dal.Repositories
             return blogs;
         }
 
+        public async Task<List<Blog>> GetAuthorDraftBlogsByAuthorIdAsync(int Id)
+        {
+            Author author = await _ctx.Authors
+                .Include((author) => author.UserProfile)
+                .ThenInclude((userProfile) => userProfile.BasicInfo)
+                .Include((author) => author.Blogs)
+                .ThenInclude((blog) => blog.Topics)
+                .FirstOrDefaultAsync((author) => author.AuthorId == Id);
+
+            if (author is null) return null;
+
+            List<Blog> blogs = author.Blogs
+                .Where((blog) => blog.IsDraft == true)
+                .ToList();
+
+            return blogs;
+        }
+
         public async Task<List<Author>> GetAllAuthorsAsync()
         {
             return await _ctx.Authors

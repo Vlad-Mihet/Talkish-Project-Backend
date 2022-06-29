@@ -32,6 +32,12 @@ namespace Talkish.Services
             return blogs;
         }
 
+        public async Task<List<Blog>> GetAuthorDraftBlogs(int Id)
+        {
+            List<Blog> blogs = await _repo.GetAuthorDraftBlogsByAuthorIdAsync(Id);
+            return blogs;
+        }
+
         public async Task<Author> GetAuthorById(int Id)
         {
             Author author = await _repo.GetAuthorByIdAsync(Id);
