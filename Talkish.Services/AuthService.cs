@@ -207,5 +207,17 @@ namespace Talkish.Services
             var token = CreateSecurityToken(claimsIdentity);
             return WriteToken(token);
         }
+
+        public async Task<bool> IsAuthorAsync(ClaimsPrincipal claimsUser)
+        {
+            string userId = _userManager.GetUserId(claimsUser);
+
+            Author authorByUserId = await _ctx.Authors
+                .Include((a) => a.UserProfile)
+                .ThenInclude((up) => up.BasicInfo)
+                .FirstOrDefaultAsync((a) => a.UserProfile.BasicInfo.Email == userId);
+
+            return authorByUserId is not null;
+        }
     }
 }
