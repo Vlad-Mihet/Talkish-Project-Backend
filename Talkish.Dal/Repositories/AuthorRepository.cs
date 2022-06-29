@@ -104,5 +104,17 @@ namespace Talkish.Dal.Repositories
                 .FirstOrDefaultAsync((author) => author.AuthorId == Id);
             return author;
         }
+
+        public async Task<Author> GetAuthorByUserIdAsync(int Id)
+        {
+            Author author = await _ctx.Authors
+                .Include((author) => author.UserProfile)
+                .ThenInclude((userProfile) => userProfile.BasicInfo)
+                .Include((author) => author.Blogs)
+                .ThenInclude((blog) => blog.Topics)
+                .FirstOrDefaultAsync((author) => author.UserId == Id);
+
+            return author;
+        }
     }
 }
