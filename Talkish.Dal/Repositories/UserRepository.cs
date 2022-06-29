@@ -84,6 +84,15 @@ namespace Talkish.Dal.Repositories
             return user;
         }
 
+        public async Task<User> GetUserByAuthorIdAsync(int Id)
+        {
+            User user = await _ctx.Users
+                .Include((user) => user.BasicInfo)
+                .FirstOrDefaultAsync((user) => user.AuthorId == Id);
+
+            return user;
+        }
+
         public async Task<List<User>> GetUserFollowersByUserIdAsync(int Id)
         {
             User user = await _ctx.Users

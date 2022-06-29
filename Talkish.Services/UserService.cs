@@ -31,6 +31,12 @@ namespace Talkish.Services
             return user;
         }
 
+        public async Task<User> GetUserByAuthorIdAsync(int Id)
+        {
+            User user = await _repo.GetUserByAuthorIdAsync(Id);
+            return user;
+        }
+
         public async Task<List<User>> GetUserFollowersByUserIdAsync(int Id)
         {
             List<User> userFollowers = await _repo.GetUserFollowersByUserIdAsync(Id);
