@@ -90,29 +90,29 @@ namespace Talkish.API
             services.Configure<JwtSettings>(jwtSection);
 
             services
-            .AddAuthentication(a =>
-            {
-                a.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                a.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                a.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(jwt =>
-            {
-                jwt.SaveToken = true;
-                jwt.TokenValidationParameters = new TokenValidationParameters
+                .AddAuthentication(a =>
                 {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSettings.SigningKey)),
-                    ValidateIssuer = true,
-                    ValidIssuer = jwtSettings.Issuer,
-                    ValidateAudience = true,
-                    ValidAudiences = jwtSettings.Audiences,
-                    RequireExpirationTime = false,
-                    ValidateLifetime = true
-                };
-                jwt.Audience = jwtSettings.Audiences[0];
-                jwt.ClaimsIssuer = jwtSettings.Issuer;
-            });
+                    a.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    a.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    a.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(jwt =>
+                {
+                    jwt.SaveToken = true;
+                    jwt.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSettings.SigningKey)),
+                        ValidateIssuer = true,
+                        ValidIssuer = jwtSettings.Issuer,
+                        ValidateAudience = true,
+                        ValidAudiences = jwtSettings.Audiences,
+                        RequireExpirationTime = false,
+                        ValidateLifetime = true
+                    };
+                    jwt.Audience = jwtSettings.Audiences[0];
+                    jwt.ClaimsIssuer = jwtSettings.Issuer;
+                });
 
             services.AddIdentityCore<IdentityUser>()
                 .AddEntityFrameworkStores<AppDbContext>();
@@ -127,8 +127,8 @@ namespace Talkish.API
             services.AddScoped<ITopicService, TopicService>();
             services.AddScoped<IPublicationService, PublicationService>();
             services.AddScoped<AuthService>();
-            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddAutoMapper(typeof(Startup));
         }
 

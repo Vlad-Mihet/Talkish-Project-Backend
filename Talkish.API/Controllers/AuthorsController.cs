@@ -1,12 +1,16 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Talkish.API.DTOs;
 using Talkish.API.Responses;
 using Talkish.Domain.Interfaces;
 using Talkish.Domain.Models;
+using Talkish.Services;
 
 namespace Talkish.API.Controllers
 {
@@ -16,11 +20,13 @@ namespace Talkish.API.Controllers
     {
         private readonly IAuthorService _service;
         private readonly IMapper _mapper;
+        private readonly AuthService _authService;
 
-        public AuthorsController(IAuthorService service, IMapper mapper)
+        public AuthorsController(IAuthorService service, IMapper mapper, AuthService authService)
         {
             _service = service;
             _mapper = mapper;
+            _authService = authService;
         }
 
         [HttpPost]
@@ -65,7 +71,7 @@ namespace Talkish.API.Controllers
                 Payload = authorDTOs,
                 Status = 200,
             };
-            
+
             return Ok(response);
         }
 
@@ -99,9 +105,31 @@ namespace Talkish.API.Controllers
 
         [Route("{Id}/Blogs")]
         [HttpGet]
-        public async Task<IActionResult> GetAuthorBlogsByAuthorIdAsync([FromRoute] int Id)
+        public async Task<IActionResult> GetAuthorBlogsByAuthorIdAsync([FromRoute] int Id, [FromQuery] bool drafts)
         {
-            List<Blog> blogs = await _service.GetAuthorBlogs(Id);
+            if (drafts)
+            {
+                try
+                {
+                    ClaimsPrincipal authUser = HttpContext.User;
+
+                    if (authUser is null) throw new Exception();
+
+                    int authUserId = await _authService.GetAuthenticatedUserIdAsync(authUser);
+
+                    Author authorByUserId = await _service.GetAuthorByUserId(authUserId);
+
+                    if (!await _authService.IsAuthorAsync(authUser) || authorByUserId.AuthorId != Id) throw new Exception();
+                }
+                catch (Exception) {
+                    return new ForbidResult();
+                }
+            }
+
+            List<Blog> blogs = drafts
+                ? await _service.GetAuthorDraftBlogs(Id)
+                : await _service.GetAuthorBlogs(Id);
+
             List<BlogDTO> blogDTOs = _mapper.Map<List<BlogDTO>>(blogs);
 
             if (blogs == null)

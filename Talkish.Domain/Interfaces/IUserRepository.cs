@@ -10,6 +10,8 @@ namespace Talkish.Domain.Interfaces
 
         Task<User> GetUserByIdAsync(int Id);
 
+        Task<User> GetUserByAuthorIdAsync(int Id);
+
         Task<List<User>> GetUserFollowersByUserIdAsync(int Id);
 
         Task<List<User>> GetUserFollowedUsersByUserIdAsync(int Id);

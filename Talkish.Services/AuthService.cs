@@ -207,5 +207,35 @@ namespace Talkish.Services
             var token = CreateSecurityToken(claimsIdentity);
             return WriteToken(token);
         }
+
+        public string RetrieveUserEmailFromClaims(ClaimsPrincipal claimsUser)
+        {
+            return _userManager.GetUserId(claimsUser);
+        }
+
+        public async Task<int> GetAuthenticatedUserIdAsync(ClaimsPrincipal claimsUser)
+        {
+            string userEmail = RetrieveUserEmailFromClaims(claimsUser);
+
+            User authUser = await _ctx.Users
+                .Include((user) => user.BasicInfo)
+                .FirstOrDefaultAsync((a) => a.BasicInfo.Email == userEmail);
+
+            if (authUser is null) throw new Exception("Couldn't retrieve auth user data");
+
+            return authUser.UserId;
+        }
+
+        public async Task<bool> IsAuthorAsync(ClaimsPrincipal claimsUser)
+        {
+            string userEmail = RetrieveUserEmailFromClaims(claimsUser);
+
+            Author authorByUserId = await _ctx.Authors
+                .Include((a) => a.UserProfile)
+                .ThenInclude((up) => up.BasicInfo)
+                .FirstOrDefaultAsync((a) => a.UserProfile.BasicInfo.Email == userEmail);
+
+            return authorByUserId is not null;
+        }
     }
 }

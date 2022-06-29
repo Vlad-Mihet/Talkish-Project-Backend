@@ -32,9 +32,22 @@ namespace Talkish.Services
             return blogs;
         }
 
+        // Method specifically to be used by an author wanting to retrieve their own blogs
+        public async Task<List<Blog>> GetAuthorDraftBlogs(int Id)
+        {
+            List<Blog> blogs = await _repo.GetAuthorDraftBlogsByAuthorIdAsync(Id);
+            return blogs;
+        }
+
         public async Task<Author> GetAuthorById(int Id)
         {
             Author author = await _repo.GetAuthorByIdAsync(Id);
+            return author;
+        }
+
+        public async Task<Author> GetAuthorByUserId(int Id)
+        {
+            Author author = await _repo.GetAuthorByUserIdAsync(Id);
             return author;
         }
 
